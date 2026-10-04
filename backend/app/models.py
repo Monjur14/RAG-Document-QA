@@ -54,3 +54,34 @@ class SearchHit(BaseModel):
     vector_score: float | None
     vector_rank: int | None
     keyword_rank: int | None
+
+
+class AskRequest(BaseModel):
+    question: str = Field(min_length=1, max_length=500)
+    k: int = Field(5, ge=1, le=10)
+    mode: Literal["vector", "keyword", "hybrid"] = "hybrid"
+    file_types: list[str] | None = None
+    document_ids: list[int] | None = None
+
+
+class CitationOut(BaseModel):
+    index: int
+    chunk_id: int
+    document_id: int
+    source: str
+    heading: str | None
+    page: int | None
+    text: str
+
+
+class AskResponse(BaseModel):
+    question: str
+    answer: str
+    status: Literal["answered", "insufficient_evidence", "model_declined", "uncited"]
+    citations: list[CitationOut]
+    confidence: float | None
+    model: str | None
+    prompt_tokens: int | None
+    completion_tokens: int | None
+    latency_ms: float
+    retrieved: int

@@ -1,0 +1,10 @@
+[
+  {"question": "What is the capital of France?", "kind": "off-topic"},
+  {"question": "How do I bake sourdough bread?", "kind": "off-topic"},
+  {"question": "What is the best pizza topping?", "kind": "off-topic"},
+  {"question": "What is the speed of light?", "kind": "off-topic"},
+  {"question": "Who is the CEO of Orbit?", "kind": "on-topic"},
+  {"question": "How much does Orbit cost?", "kind": "on-topic"},
+  {"question": "Does Orbit support Kubernetes?", "kind": "on-topic"},
+  {"question": "How do I configure single sign-on in Orbit?", "kind": "on-topic"}
+]

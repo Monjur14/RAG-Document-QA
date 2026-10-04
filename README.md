@@ -37,6 +37,18 @@ curl -X POST localhost:8000/search -H "Content-Type: application/json" \
 python -m evals.retrieval_eval    # seed eval: hit@k and MRR per mode; saves JSON to backend/evals/results/
 ```
 
+## Ask questions
+
+Needs Ollama running with a model pulled (`ollama pull llama3.1:8b`). Settings come from `.env` (see `.env.example`).
+
+```bash
+curl -X POST localhost:8000/ask -H "Content-Type: application/json" \
+  -d '{"question": "How do I install Orbit?"}'
+# -> answer with [n] citations, plus status: answered | insufficient_evidence | model_declined | uncited
+
+python -m evals.threshold_eval    # calibrate the "I don't know" threshold (MIN_VECTOR_SCORE)
+```
+
 ## Layout
 
 ```

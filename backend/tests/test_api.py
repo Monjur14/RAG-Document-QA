@@ -5,8 +5,9 @@ from fastapi.testclient import TestClient
 
 from app import main
 from app.db import get_conn
-from app.main import app, embedder_dep
-from tests.fakes import FailingEmbedder, HashEmbedder
+from app.main import app, embedder_dep, provider_dep
+from app.providers import ProviderError
+from tests.fakes import FailingEmbedder, FakeProvider, HashEmbedder
 
 plain = TestClient(app)  # for requests that are rejected before the database is touched
 
@@ -108,3 +109,36 @@ def test_search_validates_input():
     assert plain.post("/search", json={"query": ""}).status_code == 422
     assert plain.post("/search", json={"query": "x" * 501}).status_code == 422
     assert plain.post("/search", json={"query": "ok", "mode": "magic"}).status_code == 422
+
+
+def test_ask_endpoint_returns_cited_answer(client, monkeypatch):
+    from app import answering
+    monkeypatch.setattr(answering.config, "MIN_VECTOR_SCORE", 0.2)
+    app.dependency_overrides[provider_dep] = lambda: FakeProvider("Use brew [1].")
+    doc = _upload(client, _name("o.md"), b"# Install\nInstall Orbit with brew install orbit.\n").json()
+    r = client.post("/ask", json={"question": "How do I install Orbit with brew?", "document_ids": [doc["document_id"]]})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "answered" and body["citations"][0]["source"].endswith("o.md")
+    assert body["model"] == "fake" and body["latency_ms"] > 0
+
+
+def test_ask_maps_provider_failure_to_502(client, monkeypatch):
+    from app import answering
+    monkeypatch.setattr(answering.config, "MIN_VECTOR_SCORE", 0.0)
+
+    class Down:
+        model = "x"
+
+        def generate(self, prompt, system=None):
+            raise ProviderError("connection refused")
+
+    app.dependency_overrides[provider_dep] = lambda: Down()
+    doc = _upload(client, _name("p.md"), b"# T\nSome text about orbit.\n").json()
+    r = client.post("/ask", json={"question": "orbit text", "document_ids": [doc["document_id"]]})
+    assert r.status_code == 502 and "unavailable" in r.json()["detail"]
+
+
+def test_ask_validates_input():
+    assert plain.post("/ask", json={"question": ""}).status_code == 422
+    assert plain.post("/ask", json={"question": "x" * 501}).status_code == 422

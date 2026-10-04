@@ -89,3 +89,19 @@ def test_embedding_length_mismatch(conn):
 def test_indexes_exist(conn):
     names = {r[0] for r in conn.execute("SELECT indexname FROM pg_indexes WHERE tablename = 'chunks'")}
     assert {"chunks_embedding_hnsw", "chunks_tsv_gin"} <= names
+
+
+def test_connections_use_a_connect_timeout(monkeypatch):
+    """A stopped database must fail fast, not hang the request (e.g. Docker not running)."""
+    import app.db as db
+
+    seen = {}
+
+    def fake_connect(url, **kw):
+        seen.update(kw)
+        raise psycopg.OperationalError("down")
+
+    monkeypatch.setattr(db.psycopg, "connect", fake_connect)
+    with pytest.raises(psycopg.OperationalError):
+        db.get_conn("postgresql://x")
+    assert seen["connect_timeout"] == db.DB_CONNECT_TIMEOUT_S == 5

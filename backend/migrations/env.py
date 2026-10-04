@@ -2,7 +2,7 @@
 from alembic import context
 from sqlalchemy import create_engine
 
-from app.config import DATABASE_URL
+from app.config import DATABASE_URL, DB_CONNECT_TIMEOUT_S
 
 config = context.config
 
@@ -22,7 +22,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    engine = create_engine(_url())
+    engine = create_engine(_url(), connect_args={"connect_timeout": DB_CONNECT_TIMEOUT_S})
     with engine.connect() as connection:
         context.configure(connection=connection)
         with context.begin_transaction():

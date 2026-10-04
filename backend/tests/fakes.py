@@ -28,3 +28,19 @@ class FailingEmbedder:
 
     def embed_query(self, text):
         raise RuntimeError("boom")
+
+
+class FakeProvider:
+    """Stands in for an LLM: returns a canned reply and records what it was asked."""
+
+    model = "fake"
+
+    def __init__(self, reply: str = "Answer [1]."):
+        self.reply = reply
+        self.calls: list[tuple[str | None, str]] = []
+
+    def generate(self, prompt, system=None):
+        from app.providers import LLMResponse
+
+        self.calls.append((system, prompt))
+        return LLMResponse(text=self.reply, model="fake", prompt_tokens=10, completion_tokens=5, latency_ms=1.0)

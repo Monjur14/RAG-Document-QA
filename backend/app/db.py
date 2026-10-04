@@ -10,7 +10,7 @@ from alembic import command
 from alembic.config import Config
 from pgvector.psycopg import register_vector
 
-from app.config import DATABASE_URL
+from app.config import DATABASE_URL, DB_CONNECT_TIMEOUT_S
 
 ALEMBIC_INI = Path(__file__).resolve().parent.parent / "alembic.ini"
 
@@ -33,7 +33,7 @@ def downgrade(url: str = DATABASE_URL, revision: str = "base") -> None:
 
 def get_conn(url: str = DATABASE_URL) -> psycopg.Connection:
     """Open a connection that understands the pgvector type. Caller closes it."""
-    conn = psycopg.connect(url)
+    conn = psycopg.connect(url, connect_timeout=DB_CONNECT_TIMEOUT_S)
     register_vector(conn)
     return conn
 

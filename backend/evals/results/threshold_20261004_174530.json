@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-10-04T17:45:30",
+  "embedding_model": "BAAI/bge-large-en-v1.5",
+  "answerable": {
+    "min": 0.5054105219000276,
+    "mean": 0.6931185768901372,
+    "scores": [
+      [
+        "Where can I find the log file?",
+        0.5054105219000276
+      ],
+      [
+        "What happens when a job fails?",
+        0.6322702357849552
+      ],
+      [
+        "Orbit refuses to start, what should I check?",
+        0.6575253205753961
+      ],
+      [
+        "Where should I put API tokens?",
+        0.6617488072217933
+      ],
+      [
+        "How do I report a bug?",
+        0.6630238492197948
+      ]
+    ]
+  },
+  "unanswerable": [
+    {
+      "question": "How much does Orbit cost?",
+      "kind": "on-topic",
+      "score": 0.6930177394737173
+    },
+    {
+      "question": "Does Orbit support Kubernetes?",
+      "kind": "on-topic",
+      "score": 0.6897702217102051
+    },
+    {
+      "question": "How do I configure single sign-on in Orbit?",
+      "kind": "on-topic",
+      "score": 0.6547499504834454
+    },
+    {
+      "question": "Who is the CEO of Orbit?",
+      "kind": "on-topic",
+      "score": 0.5686852931976318
+    },
+    {
+      "question": "How do I bake sourdough bread?",
+      "kind": "off-topic",
+      "score": 0.45857364433126246
+    },
+    {
+      "question": "What is the speed of light?",
+      "kind": "off-topic",
+      "score": 0.4580470323562622
+    },
+    {
+      "question": "What is the best pizza topping?",
+      "kind": "off-topic",
+      "score": 0.35947068220726464
+    },
+    {
+      "question": "What is the capital of France?",
+      "kind": "off-topic",
+      "score": 0.3087818964513731
+    }
+  ],
+  "separable_off_topic": true,
+  "suggested_threshold": 0.482,
+  "at_configured_threshold": {
+    "threshold": 0.5,
+    "answerable_kept": 1.0,
+    "refused": {
+      "off-topic": 1.0,
+      "on-topic": 0.0
+    }
+  }
+}

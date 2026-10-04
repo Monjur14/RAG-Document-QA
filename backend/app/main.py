@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from dataclasses import asdict
 from pathlib import Path
 
 import psycopg
@@ -7,11 +8,13 @@ from fastapi.concurrency import run_in_threadpool
 
 from app import repository as repo
 from app.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, MAX_UPLOAD_MB
+from app.answering import answer_question
 from app.db import get_conn
 from app.embeddings import Embedder, get_embedder
 from app.ingest import EmptyDocument, IngestionFailed, ingest_document
-from app.models import DocumentInfo, SearchHit, SearchRequest, UploadResponse
+from app.models import AskRequest, AskResponse, DocumentInfo, SearchHit, SearchRequest, UploadResponse
 from app.parsers import MalformedFile, UnsupportedFormat
+from app.providers import LLMProvider, ProviderError, get_provider
 from app.retrieval import search
 
 app = FastAPI(title="Secure RAG Document Q&A")
@@ -20,6 +23,10 @@ app = FastAPI(title="Secure RAG Document Q&A")
 # Dependencies are functions so tests can swap in a fake embedder / different database.
 def embedder_dep() -> Embedder:
     return get_embedder()
+
+
+def provider_dep() -> LLMProvider:
+    return get_provider()
 
 
 def connect_dep() -> Callable[[], psycopg.Connection]:
@@ -114,3 +121,25 @@ async def search_chunks(
     except psycopg.OperationalError as exc:
         raise HTTPException(503, "Database unavailable") from exc
     return [SearchHit(**h.__dict__) for h in hits]
+
+
+@app.post("/ask", response_model=AskResponse)
+async def ask(
+    req: AskRequest,
+    embedder: Embedder = Depends(embedder_dep),
+    provider: LLMProvider = Depends(provider_dep),
+    connect: Callable = Depends(connect_dep),
+) -> AskResponse:
+    def work(conn: psycopg.Connection):
+        return answer_question(
+            conn, embedder, provider, req.question, k=req.k, mode=req.mode,
+            file_types=req.file_types, document_ids=req.document_ids,
+        )
+
+    try:
+        result = await run_in_threadpool(_with_conn, connect, work)
+    except ProviderError as exc:
+        raise HTTPException(502, f"The language model is unavailable: {exc}") from exc
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
+    return AskResponse(**asdict(result))

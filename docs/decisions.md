@@ -56,3 +56,19 @@ Short record of trade-offs and why. Newest at the bottom.
 - **Cosine similarity is kept on every hit (`vector_score`)**, including in hybrid mode: the "I don't know" threshold in step 5 needs it, because RRF scores say nothing about absolute relevance.
 - **Only `indexed` documents are searchable**; pending/failed documents never leak into answers.
 - **Seed eval (16 questions, 3 sample docs)** exists to prove the harness and give a first signal; it is too small to support claims. The 80-question set comes in Week 2.
+
+## 2026-10-04: Answer generation
+- **Provider interface** (`generate(prompt, system) -> LLMResponse`) with an Ollama adapter first; Gemini/OpenRouter adapters, retries and fallback are Week 3. Model is a setting (`OLLAMA_MODEL`, default `llama3.1:8b`), so models can be compared in the evals by changing one variable.
+- **Temperature 0, explicit `num_ctx`.** Deterministic answers make eval runs repeatable; Ollama's default context is small, so it is set explicitly so the retrieved sources are not silently truncated.
+- **`think` is only sent when `OLLAMA_THINK` is set** (needed for Qwen3-style models, to skip the slow reasoning phase; omitted for Llama).
+- **Refuse before calling the LLM when evidence is weak** (best cosine similarity below `MIN_VECTOR_SCORE`). Saves latency and cost, and removes the chance of the model improvising from weak context. The threshold is *calibrated*, not guessed: `python -m evals.threshold_eval`.
+- **Four answer statuses** (`answered`, `insufficient_evidence`, `model_declined`, `uncited`) instead of a boolean, so the UI and the evals can tell the failure modes apart. An answer with no valid `[n]` citation is flagged `uncited` rather than presented as trustworthy.
+- **Citations are validated against the retrieved set**; numbers the model invents are dropped.
+- **Prompt structure (first layer of injection defense):** sources are wrapped in `<source>` tags, the system prompt says they are untrusted data, and passage text/attributes are neutralized so a document cannot close the tag or add attributes. Known limitation: a literal `[1]` in a model answer that is not a citation is counted as one.
+- **`.env` is now loaded automatically** (python-dotenv), so settings in the repo-root `.env` take effect.
+
+## 2026-10-04: Refusal threshold set to 0.48 (measured, provisional)
+- `python -m evals.threshold_eval` with bge-large on the seed sets: lowest answerable question scored 0.505; off-topic questions peaked at 0.459. The old guess of 0.5 kept every answerable question by a margin of only 0.005. 0.48 is the midpoint, giving about 0.02 of margin on each side.
+- **On-topic questions the documents do not answer** (e.g. "How much does Orbit cost?") score 0.57-0.69, inside the range of real answers, so no threshold can refuse them. They rely on the LLM declining. This is why there are two layers (score threshold, then the model's own "I don't know") and why the answer statuses distinguish them.
+- **Caveats:** only 4 off-topic and 4 on-topic unanswerable questions; the margin will shrink on a bigger set. Thresholds are specific to the embedding model: recalibrate whenever the model changes.
+- Error costs are asymmetric: wrongly refusing a real question is worse than passing a weak one to the LLM (which usually declines), so when in doubt, err toward the lower threshold.
