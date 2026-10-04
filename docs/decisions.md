@@ -31,3 +31,28 @@ Short record of trade-offs and why. Newest at the bottom.
 
 ## 2026-10-04: Host port 5433 for Postgres
 - The Docker database is published on host port **5433**, not 5432, to avoid clashing with a PostgreSQL already installed on the developer's machine (which caused "password authentication failed"). Inside the container it is still 5432.
+
+## 2026-10-04: Embeddings and ingestion
+- **Model: BAAI/bge-small-en-v1.5 (384-d), run on the GPU via sentence-transformers.** Small and fast, strong on retrieval benchmarks, and free/local. Bigger bge models are a candidate to compare in the evals (needs a migration: the column size is fixed).
+- **Query/passage asymmetry:** bge expects an instruction prefix on queries but not on passages, so `embed_query` and `embed_documents` are separate methods.
+- **Chunk heading is prepended to the text that gets embedded** (not to the stored text), so a passage like "Run the thing." is embedded with its section context. Worth ablating in the evals.
+- **Vectors are L2-normalized**, so cosine distance and dot product agree.
+- **Embedder is an interface** (`Embedder` protocol) with lazy model loading; tests use a deterministic hash-based fake, so the suite needs no GPU or model download. One slow test with the real model runs with `RUN_MODEL_TESTS=1`.
+- **Document row is committed as `pending` before embedding.** If embedding/storage fails, the transaction is rolled back and the document is marked `failed` with the reason, so failures are visible in the library and never leave half-indexed documents.
+- **Parse/validation errors are rejected before any database write** and return 4xx; only indexing failures create a `failed` record.
+- **Blocking work (parsing, embedding, SQL) runs in a threadpool** so the async API stays responsive.
+- Original upload files are not stored yet; re-index will need that (library page work, later).
+
+## 2026-10-04: Embedding model changed to bge-large-en-v1.5 (1024-d)
+- Supersedes the bge-small choice above. Picked for the best retrieval quality of the bge English family; the RTX 5070 Ti handles it comfortably, and the cost is slower indexing/queries and a larger index (1024 vs 384 dimensions per chunk).
+- Done as migration `0002` (drops the HNSW index, resizes the column, rebuilds the index). It deletes existing documents because vectors from different models can't be converted; fine with test data only.
+- pgvector's HNSW index supports up to 2000 dimensions, so 1024 is within limits.
+- Still to measure in the evals: bge-small vs bge-base vs bge-large (quality gain vs latency), so the choice is backed by numbers.
+
+## 2026-10-04: Retrieval
+- **Three modes behind one `search()`**: vector, keyword, hybrid, so the evals can compare them directly.
+- **Hybrid uses reciprocal rank fusion (k=60) over the top 50 of each retriever.** RRF uses only ranks, so cosine similarity and `ts_rank` never need to be normalised to the same scale.
+- **Keyword queries are OR-joined** (`word | word | ...`) instead of `websearch_to_tsquery`'s AND. A natural-language question rarely contains every word of the answer passage, and stop words are dropped by Postgres. The query is built from letters/digits only, so user text can't inject tsquery syntax.
+- **Cosine similarity is kept on every hit (`vector_score`)**, including in hybrid mode: the "I don't know" threshold in step 5 needs it, because RRF scores say nothing about absolute relevance.
+- **Only `indexed` documents are searchable**; pending/failed documents never leak into answers.
+- **Seed eval (16 questions, 3 sample docs)** exists to prove the harness and give a first signal; it is too small to support claims. The 80-question set comes in Week 2.

@@ -9,5 +9,7 @@ UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", "./uploads"))
 ALLOWED_EXTENSIONS = {".txt", ".md", ".markdown", ".html", ".htm"}
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://rag:rag@localhost:5433/rag")
-# Must match the embedding model (bge-small-en-v1.5 = 384). Changing it needs a re-index.
-EMBEDDING_DIM = 384
+# Must match the embedding model (bge-large-en-v1.5 = 1024). Changing it needs a migration + re-index.
+EMBEDDING_DIM = 1024
+
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")

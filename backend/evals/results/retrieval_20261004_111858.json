@@ -1,0 +1,146 @@
+{
+  "timestamp": "2026-10-04T11:18:54",
+  "embedding_model": "BAAI/bge-large-en-v1.5",
+  "chunking": {
+    "strategy": "heading",
+    "chunk_size": 800,
+    "overlap": 100
+  },
+  "k": 5,
+  "questions": 16,
+  "modes": {
+    "vector": {
+      "hit@1": 0.875,
+      "hit@3": 0.9375,
+      "hit@5": 0.9375,
+      "mrr": 0.90625,
+      "avg_ms_per_query": 200.4,
+      "not_ranked_first": [
+        {
+          "question": "How much memory does the scheduler need?",
+          "expected": "System requirements",
+          "rank": 2,
+          "got": [
+            "High memory usage",
+            "System requirements",
+            "Schedules"
+          ]
+        },
+        {
+          "question": "Orbit refuses to start, what should I check?",
+          "expected": "Daemon will not start",
+          "rank": null,
+          "got": [
+            "Troubleshooting",
+            "Jobs are not running",
+            "System requirements"
+          ]
+        }
+      ]
+    },
+    "keyword": {
+      "hit@1": 0.6875,
+      "hit@3": 0.75,
+      "hit@5": 0.875,
+      "mrr": 0.7364583333333333,
+      "avg_ms_per_query": 0.6,
+      "not_ranked_first": [
+        {
+          "question": "Orbit refuses to start, what should I check?",
+          "expected": "Daemon will not start",
+          "rank": null,
+          "got": [
+            "Installing Orbit",
+            "Upgrading",
+            "System requirements"
+          ]
+        },
+        {
+          "question": "My job never fires. How can I check my YAML?",
+          "expected": "Jobs are not running",
+          "rank": 3,
+          "got": [
+            "Defining jobs",
+            "Retries and timeouts",
+            "Jobs are not running"
+          ]
+        },
+        {
+          "question": "Why is RAM usage growing over time?",
+          "expected": "High memory usage",
+          "rank": 4,
+          "got": [
+            "Jobs are not running",
+            "System requirements",
+            "Retries and timeouts"
+          ]
+        },
+        {
+          "question": "Where can I find the log file?",
+          "expected": "Troubleshooting",
+          "rank": 5,
+          "got": [
+            "Defining jobs",
+            "Upgrading",
+            "Retries and timeouts"
+          ]
+        },
+        {
+          "question": "How do I report a bug?",
+          "expected": "Getting help",
+          "rank": null,
+          "got": []
+        }
+      ]
+    },
+    "hybrid": {
+      "hit@1": 0.75,
+      "hit@3": 0.9375,
+      "hit@5": 0.9375,
+      "mrr": 0.84375,
+      "avg_ms_per_query": 17.9,
+      "not_ranked_first": [
+        {
+          "question": "Orbit refuses to start, what should I check?",
+          "expected": "Daemon will not start",
+          "rank": null,
+          "got": [
+            "Installing Orbit",
+            "System requirements",
+            "Troubleshooting"
+          ]
+        },
+        {
+          "question": "My job never fires. How can I check my YAML?",
+          "expected": "Jobs are not running",
+          "rank": 2,
+          "got": [
+            "Defining jobs",
+            "Jobs are not running",
+            "Retries and timeouts"
+          ]
+        },
+        {
+          "question": "Why is RAM usage growing over time?",
+          "expected": "High memory usage",
+          "rank": 2,
+          "got": [
+            "System requirements",
+            "High memory usage",
+            "Jobs are not running"
+          ]
+        },
+        {
+          "question": "Where can I find the log file?",
+          "expected": "Troubleshooting",
+          "rank": 2,
+          "got": [
+            "Defining jobs",
+            "Troubleshooting",
+            "Upgrading"
+          ]
+        }
+      ]
+    }
+  }
+}

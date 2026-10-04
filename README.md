@@ -12,16 +12,29 @@ docker compose up -d db          # PostgreSQL + pgvector
 
 cd backend
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+# PyTorch with GPU support first (RTX 50-series needs the CUDA 12.8 build):
+pip install torch --index-url https://download.pytorch.org/whl/cu128
 pip install -r requirements.txt
 python -m app.db                 # create/upgrade the database (runs migrations)
 pytest                           # run tests
 uvicorn app.main:app --reload    # http://localhost:8000/docs
 ```
 
+Smoke-test the real embedding model (downloads ~1.3 GB the first time): `python -m app.embeddings`
+
 ## Try it
 
 ```bash
 curl -F "file=@README.md" http://localhost:8000/documents/upload
+```
+
+## Search and evals
+
+```bash
+curl -X POST localhost:8000/search -H "Content-Type: application/json" \
+  -d '{"query": "how do I reset my password", "k": 5, "mode": "hybrid"}'   # mode: vector | keyword | hybrid
+
+python -m evals.retrieval_eval    # seed eval: hit@k and MRR per mode; saves JSON to backend/evals/results/
 ```
 
 ## Layout

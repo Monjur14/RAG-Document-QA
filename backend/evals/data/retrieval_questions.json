@@ -1,0 +1,18 @@
+[
+  {"question": "How do I install Orbit on a Mac?", "source": "orbit-install.md", "heading": "Installing Orbit"},
+  {"question": "Does Orbit work on Windows?", "source": "orbit-install.md", "heading": "Installing Orbit"},
+  {"question": "How much memory does the scheduler need?", "source": "orbit-install.md", "heading": "System requirements"},
+  {"question": "What are the CPU and disk requirements?", "source": "orbit-install.md", "heading": "System requirements"},
+  {"question": "How do I move to a newer version safely?", "source": "orbit-install.md", "heading": "Upgrading"},
+  {"question": "Does uninstalling delete my job history?", "source": "orbit-install.md", "heading": "Uninstalling"},
+  {"question": "How do I make a job run every night at 3 AM?", "source": "orbit-jobs.md", "heading": "Schedules"},
+  {"question": "What happens when a job fails?", "source": "orbit-jobs.md", "heading": "Retries and timeouts"},
+  {"question": "How long can a job run before it is killed?", "source": "orbit-jobs.md", "heading": "Retries and timeouts"},
+  {"question": "Where should I put API tokens?", "source": "orbit-jobs.md", "heading": "Environment variables"},
+  {"question": "Where do job definition files go?", "source": "orbit-jobs.md", "heading": "Defining jobs"},
+  {"question": "Orbit refuses to start, what should I check?", "source": "orbit-troubleshooting.md", "heading": "Daemon will not start"},
+  {"question": "My job never fires. How can I check my YAML?", "source": "orbit-troubleshooting.md", "heading": "Jobs are not running"},
+  {"question": "Why is RAM usage growing over time?", "source": "orbit-troubleshooting.md", "heading": "High memory usage"},
+  {"question": "Where can I find the log file?", "source": "orbit-troubleshooting.md", "heading": "Troubleshooting"},
+  {"question": "How do I report a bug?", "source": "orbit-troubleshooting.md", "heading": "Getting help"}
+]

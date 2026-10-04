@@ -1,0 +1,30 @@
+"""Deterministic stand-in for the real embedding model so tests are fast and need no GPU/download.
+Hashes words into a 384-d vector, so texts that share words end up close together."""
+import math
+import re
+import zlib
+
+from app.config import EMBEDDING_DIM
+
+
+class HashEmbedder:
+    def _vec(self, text: str) -> list[float]:
+        v = [0.0] * EMBEDDING_DIM
+        for word in re.findall(r"[a-z0-9]+", text.lower()):
+            v[zlib.crc32(word.encode()) % EMBEDDING_DIM] += 1.0
+        norm = math.sqrt(sum(x * x for x in v)) or 1.0
+        return [x / norm for x in v]
+
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
+        return [self._vec(t) for t in texts]
+
+    def embed_query(self, text: str) -> list[float]:
+        return self._vec(text)
+
+
+class FailingEmbedder:
+    def embed_documents(self, texts):
+        raise RuntimeError("boom")
+
+    def embed_query(self, text):
+        raise RuntimeError("boom")

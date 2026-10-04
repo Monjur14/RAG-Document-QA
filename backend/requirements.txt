@@ -9,3 +9,4 @@ pgvector>=0.3
 numpy>=1.26
 alembic>=1.13
 sqlalchemy>=2.0
+sentence-transformers>=3.0

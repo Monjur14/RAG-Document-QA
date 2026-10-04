@@ -1,12 +1,37 @@
+from collections.abc import Callable
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, UploadFile
+import psycopg
+from fastapi import Depends, FastAPI, HTTPException, Response, UploadFile
+from fastapi.concurrency import run_in_threadpool
 
+from app import repository as repo
 from app.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, MAX_UPLOAD_MB
-from app.models import UploadResponse
-from app.parsers import MalformedFile, UnsupportedFormat, parse_file
+from app.db import get_conn
+from app.embeddings import Embedder, get_embedder
+from app.ingest import EmptyDocument, IngestionFailed, ingest_document
+from app.models import DocumentInfo, SearchHit, SearchRequest, UploadResponse
+from app.parsers import MalformedFile, UnsupportedFormat
+from app.retrieval import search
 
 app = FastAPI(title="Secure RAG Document Q&A")
+
+
+# Dependencies are functions so tests can swap in a fake embedder / different database.
+def embedder_dep() -> Embedder:
+    return get_embedder()
+
+
+def connect_dep() -> Callable[[], psycopg.Connection]:
+    return get_conn
+
+
+def _with_conn(connect: Callable[[], psycopg.Connection], fn):
+    conn = connect()
+    try:
+        return fn(conn)
+    finally:
+        conn.close()
 
 
 @app.get("/health")
@@ -15,7 +40,11 @@ async def health() -> dict[str, str]:
 
 
 @app.post("/documents/upload", response_model=UploadResponse)
-async def upload_document(file: UploadFile) -> UploadResponse:
+async def upload_document(
+    file: UploadFile,
+    embedder: Embedder = Depends(embedder_dep),
+    connect: Callable = Depends(connect_dep),
+) -> UploadResponse:
     # Use only the base name; never trust client-supplied paths.
     filename = Path(file.filename or "").name
     ext = Path(filename).suffix.lower()
@@ -30,19 +59,58 @@ async def upload_document(file: UploadFile) -> UploadResponse:
         raise HTTPException(400, "File is empty")
 
     try:
-        sections = parse_file(filename, raw)
+        # Parsing, embedding and SQL are blocking work: keep them off the event loop.
+        result = await run_in_threadpool(ingest_document, connect, embedder, filename, raw)
     except UnsupportedFormat as exc:
         raise HTTPException(415, str(exc)) from exc
-    except MalformedFile as exc:
+    except (MalformedFile, EmptyDocument) as exc:
         raise HTTPException(422, str(exc)) from exc
+    except IngestionFailed as exc:
+        raise HTTPException(500, f"Indexing failed for document {exc.document_id}: {exc}") from exc
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
 
-    if not sections:
-        raise HTTPException(422, "No extractable text found in file")
+    return UploadResponse(status="indexed", **result.__dict__)
 
-    return UploadResponse(
-        filename=filename,
-        file_type=ext.lstrip("."),
-        sections=len(sections),
-        characters=sum(len(s.text) for s in sections),
-        preview=sections[:3],
-    )
+
+@app.get("/documents", response_model=list[DocumentInfo])
+async def list_documents(connect: Callable = Depends(connect_dep)) -> list[dict]:
+    try:
+        return await run_in_threadpool(_with_conn, connect, repo.list_documents)
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
+
+
+@app.delete("/documents/{doc_id}", status_code=204)
+async def delete_document(doc_id: int, connect: Callable = Depends(connect_dep)) -> Response:
+    def work(conn: psycopg.Connection) -> bool:
+        found = repo.delete_document(conn, doc_id)
+        conn.commit()
+        return found
+
+    try:
+        found = await run_in_threadpool(_with_conn, connect, work)
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
+    if not found:
+        raise HTTPException(404, "Document not found")
+    return Response(status_code=204)
+
+
+@app.post("/search", response_model=list[SearchHit])
+async def search_chunks(
+    req: SearchRequest,
+    embedder: Embedder = Depends(embedder_dep),
+    connect: Callable = Depends(connect_dep),
+) -> list[SearchHit]:
+    def work(conn: psycopg.Connection):
+        return search(
+            conn, embedder, req.query, k=req.k, mode=req.mode,
+            file_types=req.file_types, document_ids=req.document_ids,
+        )
+
+    try:
+        hits = await run_in_threadpool(_with_conn, connect, work)
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
+    return [SearchHit(**h.__dict__) for h in hits]
