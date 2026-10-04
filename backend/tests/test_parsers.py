@@ -45,3 +45,19 @@ def test_rejects_binary_and_bad_encoding():
         parse_file("a.txt", b"abc\x00def")
     with pytest.raises(MalformedFile):
         parse_file("a.txt", b"\xff\xfe\xfa")
+
+
+def test_markdown_strips_mkdocs_noise():
+    from app.parsers.markdown import parse_markdown
+
+    md = (
+        "# First Steps { #first-steps }\n\n"
+        "{* ../../docs_src/x.py *}\n\n"
+        "/// tip\n\nUse the thing.\n\n///\n\n"
+        "```\n/// keep this\n{* and this *}\n```\n"
+    )
+    secs = parse_markdown(md, "a.md")
+    assert secs[0].heading == "First Steps"
+    text = secs[0].text
+    assert "Use the thing." in text and "docs_src" not in text and "/// tip" not in text
+    assert "/// keep this" in text and "{* and this *}" in text

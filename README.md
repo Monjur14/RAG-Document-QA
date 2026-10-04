@@ -53,7 +53,7 @@ python -m evals.threshold_eval    # calibrate the "I don't know" threshold (MIN_
 
 ```
 backend/app/        FastAPI app (thin API layer)
-backend/app/parsers one parser per format -> normalized ParsedSection
+backend/app/parsers one parser per format (txt, md, html, pdf, docx) -> normalized ParsedSection
 backend/tests/      unit + API tests
 frontend/           React/Next.js UI (later)
 docs/decisions.md   decision log

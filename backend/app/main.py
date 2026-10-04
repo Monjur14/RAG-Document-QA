@@ -6,6 +6,7 @@ import psycopg
 from fastapi import Depends, FastAPI, HTTPException, Response, UploadFile
 from fastapi.concurrency import run_in_threadpool
 
+from app import config
 from app import repository as repo
 from app.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, MAX_UPLOAD_MB
 from app.answering import answer_question
@@ -27,6 +28,14 @@ def embedder_dep() -> Embedder:
 
 def provider_dep() -> LLMProvider:
     return get_provider()
+
+
+def reranker_dep():
+    if not config.RERANK_ENABLED:
+        return None
+    from app.rerank import get_reranker
+
+    return get_reranker()
 
 
 def connect_dep() -> Callable[[], psycopg.Connection]:
@@ -128,12 +137,13 @@ async def ask(
     req: AskRequest,
     embedder: Embedder = Depends(embedder_dep),
     provider: LLMProvider = Depends(provider_dep),
+    reranker=Depends(reranker_dep),
     connect: Callable = Depends(connect_dep),
 ) -> AskResponse:
     def work(conn: psycopg.Connection):
         return answer_question(
             conn, embedder, provider, req.question, k=req.k, mode=req.mode,
-            file_types=req.file_types, document_ids=req.document_ids,
+            file_types=req.file_types, document_ids=req.document_ids, reranker=reranker,
         )
 
     try:

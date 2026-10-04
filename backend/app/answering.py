@@ -16,6 +16,7 @@ import psycopg
 from app import config
 from app.embeddings import Embedder
 from app.providers import LLMProvider
+from app.rerank import rerank
 from app.retrieval import Mode, RetrievedChunk, search
 
 Status = Literal["answered", "insufficient_evidence", "model_declined", "uncited"]
@@ -113,13 +114,22 @@ def answer_question(
     min_score: float | None = None,
     file_types: list[str] | None = None,
     document_ids: list[int] | None = None,
+    reranker=None,
 ) -> Answer:
     t0 = time.perf_counter()
     k = k or config.ANSWER_TOP_K
     min_score = config.MIN_VECTOR_SCORE if min_score is None else min_score
 
-    chunks = search(conn, embedder, question, k=k, mode=mode, file_types=file_types, document_ids=document_ids)
-    confidence = best_vector_score(chunks)
+    if reranker is not None:
+        # Confidence comes from the whole candidate pool, not just the reranked top k: the reranker may
+        # push the highest-cosine chunk out of the top k, which must not turn a good match into a refusal.
+        pool = search(conn, embedder, question, k=max(config.RERANK_POOL, k), mode=mode,
+                      file_types=file_types, document_ids=document_ids)
+        confidence = best_vector_score(pool)
+        chunks = rerank(question, pool, reranker, k)
+    else:
+        chunks = search(conn, embedder, question, k=k, mode=mode, file_types=file_types, document_ids=document_ids)
+        confidence = best_vector_score(chunks)
 
     def done(**kw) -> Answer:
         return Answer(question=question, confidence=confidence, retrieved=len(chunks),

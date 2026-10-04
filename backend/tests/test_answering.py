@@ -120,3 +120,16 @@ def test_no_documents_means_insufficient_evidence(db_ready):
     with get_conn() as c:
         a = answer_question(c, HashEmbedder(), fake, "anything at all", document_ids=[-1])
     assert a.status == "insufficient_evidence" and a.retrieved == 0 and fake.calls == []
+
+
+def test_rerank_reorders_sources_but_confidence_comes_from_the_pool(doc):
+    from tests.fakes import WordOverlapReranker
+
+    class PreferUninstall(WordOverlapReranker):
+        def score(self, query, passages):  # ranks the Uninstall passage first regardless of cosine
+            return [10.0 if "Remove" in p else 0.0 for p in passages]
+
+    fake = FakeProvider("Remove it [1].")
+    a = ask(fake, "How do I install Orbit with brew?", doc, k=1, reranker=PreferUninstall())
+    assert a.citations[0].heading == "Uninstall"          # reranker's choice, not the cosine winner
+    assert a.status == "answered" and a.confidence >= 0.2  # confidence from the Install chunk in the pool

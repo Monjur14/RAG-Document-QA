@@ -26,3 +26,6 @@ eval_results/tmp/
 Thumbs.db
 .vscode/
 .idea/
+
+# downloaded eval corpus (rebuild with: python -m evals.fetch_corpus)
+backend/evals/data/corpus/

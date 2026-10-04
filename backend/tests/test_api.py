@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 
 from app import main
 from app.db import get_conn
-from app.main import app, embedder_dep, provider_dep
+from app.main import app, embedder_dep, provider_dep, reranker_dep
 from app.providers import ProviderError
 from tests.fakes import FailingEmbedder, FakeProvider, HashEmbedder
 
@@ -23,6 +23,7 @@ def _name(suffix: str) -> str:
 @pytest.fixture()
 def client(db_ready):
     app.dependency_overrides[embedder_dep] = lambda: HashEmbedder()
+    app.dependency_overrides[reranker_dep] = lambda: None  # never load the real cross-encoder in tests
     yield TestClient(app)
     app.dependency_overrides.clear()
     with get_conn() as c:

@@ -44,3 +44,13 @@ class FakeProvider:
 
         self.calls.append((system, prompt))
         return LLMResponse(text=self.reply, model="fake", prompt_tokens=10, completion_tokens=5, latency_ms=1.0)
+
+
+class WordOverlapReranker:
+    """Deterministic stand-in for a cross-encoder: score = number of query words found in the passage."""
+
+    model_name = "word-overlap"
+
+    def score(self, query: str, passages: list[str]) -> list[float]:
+        q = set(query.lower().split())
+        return [float(len(q & set(p.lower().split()))) for p in passages]

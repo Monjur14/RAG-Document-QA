@@ -22,6 +22,11 @@ DB_CONNECT_TIMEOUT_S = int(os.getenv("DB_CONNECT_TIMEOUT_S", "5"))
 EMBEDDING_DIM = 1024
 
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
+# Cross-encoder used to rerank retrieval candidates (see app/rerank.py).
+RERANK_MODEL = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-base")
+# /ask reorders the retrieved candidates with the cross-encoder (adds ~1 GB of model memory and ~80 ms).
+RERANK_ENABLED = os.getenv("RERANK_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
+RERANK_POOL = int(os.getenv("RERANK_POOL", "20"))
 
 # --- LLM (answer generation) ---
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")

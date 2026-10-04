@@ -11,6 +11,7 @@ from app.parsers.errors import MalformedFile
 LINE_TOLERANCE = 3.0       # points: words whose tops differ less than this share a line
 HEADING_SIZE_RATIO = 1.15  # heading if font size >= body size * this
 PARAGRAPH_GAP_RATIO = 0.6  # vertical gap above this * line height starts a new paragraph
+WORD_GAP_RATIO = 0.1       # word gap as a fraction of font size; the fixed default glues words in some PDFs
 
 
 @dataclass
@@ -102,7 +103,7 @@ def parse_pdf(raw: bytes, source: str) -> list[ParsedSection]:
                         lambda o, bb=bboxes: o.get("object_type") != "char"
                         or not _in_any(bb, o["x0"], o["x1"], o["top"], o["bottom"])
                     )
-                words = view.extract_words(extra_attrs=["size", "fontname"])
+                words = view.extract_words(extra_attrs=["size", "fontname"], x_tolerance_ratio=WORD_GAP_RATIO)
                 lines = _group_lines(words)
                 for ln in lines:
                     sizes[ln.size] += len(ln.text)

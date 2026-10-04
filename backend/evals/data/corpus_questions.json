@@ -1,0 +1,258 @@
+[
+ {
+  "id": "f01",
+  "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+  "source": "fastapi-body.md",
+  "evidence": "Read the body of the request as JSON.",
+  "heading": "Results",
+  "page": null
+ },
+ {
+  "id": "f02",
+  "question": "Which HTTP methods are normally used to send data in a request body?",
+  "source": "fastapi-body.md",
+  "evidence": "`POST` (the most common), `PUT`, `DELETE` or `PATCH`",
+  "heading": "Request Body",
+  "page": null
+ },
+ {
+  "id": "f03",
+  "question": "How does FastAPI decide whether a function parameter is a path, query or body parameter?",
+  "source": "fastapi-body.md",
+  "evidence": "If the parameter is also declared in the **path**, it will be used as a path parameter.",
+  "heading": "Request body + path + query parameters",
+  "page": null
+ },
+ {
+  "id": "f04",
+  "question": "How do I make a query parameter optional?",
+  "source": "fastapi-query-params.md",
+  "evidence": "by setting their default to `None`",
+  "heading": "Optional parameters",
+  "page": null
+ },
+ {
+  "id": "f05",
+  "question": "Do path and query parameters have to be declared in a specific order?",
+  "source": "fastapi-query-params.md",
+  "evidence": "you don't have to declare them in any specific order",
+  "heading": "Multiple path and query parameters",
+  "page": null
+ },
+ {
+  "id": "f06",
+  "question": "Why must /users/me be declared before /users/{user_id}?",
+  "source": "fastapi-path-params.md",
+  "evidence": "*path operations* are evaluated in order",
+  "heading": "Order matters",
+  "page": null
+ },
+ {
+  "id": "f07",
+  "question": "How do I restrict a path parameter to a predefined set of values?",
+  "source": "fastapi-path-params.md",
+  "evidence": "you can use a standard Python",
+  "heading": "Predefined values",
+  "page": null
+ },
+ {
+  "id": "f08",
+  "question": "What library performs data validation in FastAPI?",
+  "source": "fastapi-path-params.md",
+  "evidence": "All the data validation is performed under the hood by",
+  "heading": "Pydantic",
+  "page": null
+ },
+ {
+  "id": "f09",
+  "question": "Does OpenAPI support path parameters that contain a path?",
+  "source": "fastapi-path-params.md",
+  "evidence": "OpenAPI doesn't support a way to declare a *path parameter* to contain a *path* inside",
+  "heading": "OpenAPI support",
+  "page": null
+ },
+ {
+  "id": "f10",
+  "question": "What URL serves the Swagger UI interactive docs when running locally?",
+  "source": "fastapi-first-steps.md",
+  "evidence": "http://127.0.0.1:8000/docs",
+  "heading": "First Steps",
+  "page": null
+ },
+ {
+  "id": "f11",
+  "question": "Which tool provides the alternative API documentation?",
+  "source": "fastapi-first-steps.md",
+  "evidence": "provided by [ReDoc]",
+  "heading": "Alternative API docs",
+  "page": null
+ },
+ {
+  "id": "f12",
+  "question": "Which HTTP method should be used to create data?",
+  "source": "fastapi-first-steps.md",
+  "evidence": "`POST`: to create data.",
+  "heading": "Operation",
+  "page": null
+ },
+ {
+  "id": "f13",
+  "question": "Which command runs the FastAPI development server?",
+  "source": "fastapi-first-steps.md",
+  "evidence": "`fastapi dev`",
+  "heading": "`fastapi dev` with path or with `--entrypoint` CLI option",
+  "page": null
+ },
+ {
+  "id": "f14",
+  "question": "How do I run a task after returning a response?",
+  "source": "fastapi-background-tasks.md",
+  "evidence": "You can define background tasks to be run *after* returning a response.",
+  "heading": "Background Tasks",
+  "page": null
+ },
+ {
+  "id": "f15",
+  "question": "What method adds a function to the background tasks object?",
+  "source": "fastapi-background-tasks.md",
+  "evidence": "`.add_task()`",
+  "heading": "Add the background task",
+  "page": null
+ },
+ {
+  "id": "f16",
+  "question": "When should I use Celery instead of BackgroundTasks?",
+  "source": "fastapi-background-tasks.md",
+  "evidence": "If you need to perform heavy background computation",
+  "heading": "Caveat",
+  "page": null
+ },
+ {
+  "id": "f17",
+  "question": "What is dependency injection in FastAPI?",
+  "source": "fastapi-dependencies-index.md",
+  "evidence": "a way for your code (in this case, your *path operation functions*) to declare things that it requires to work",
+  "heading": "What is \"Dependency Injection\"",
+  "page": null
+ },
+ {
+  "id": "f18",
+  "question": "Can a dependency be an async function?",
+  "source": "fastapi-dependencies-index.md",
+  "evidence": "You can use `async def` or normal `def`.",
+  "heading": "To `async` or not to `async`",
+  "page": null
+ },
+ {
+  "id": "f19",
+  "question": "What status code is returned when the Authorization header is missing?",
+  "source": "fastapi-security-first-steps.md",
+  "evidence": "it will respond with a 401 status code error (`UNAUTHORIZED`)",
+  "heading": "What it does",
+  "page": null
+ },
+ {
+  "id": "f20",
+  "question": "What does OAuth2PasswordBearer look for in a request?",
+  "source": "fastapi-security-first-steps.md",
+  "evidence": "look in the request for that `Authorization` header",
+  "heading": "What it does",
+  "page": null
+ },
+ {
+  "id": "n01",
+  "question": "What are the four functions of the AI RMF Core?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "GOVERN , MAP , MEASURE , and MANAGE",
+  "heading": "Executive Summary",
+  "page": 8
+ },
+ {
+  "id": "n02",
+  "question": "Which AI RMF function applies to all stages of AI risk management?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "While GOVERN applies to all stages",
+  "heading": "Executive Summary",
+  "page": 8
+ },
+ {
+  "id": "n03",
+  "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "valid and reliable, safe, secure and resilient, accountable and transparent, explainable and interpretable, privacy enhanced, and fair with their harmful biases managed",
+  "heading": "Executive Summary",
+  "page": 8
+ },
+ {
+  "id": "n04",
+  "question": "Is the AI RMF mandatory?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "voluntary , rights-preserving, non-sector-specific, and use-case agnostic",
+  "heading": "Executive Summary",
+  "page": 7
+ },
+ {
+  "id": "n05",
+  "question": "What law directed NIST to create the AI RMF?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "National Artificial Intelligence Initiative Act of 2020",
+  "heading": "Executive Summary",
+  "page": 7
+ },
+ {
+  "id": "n06",
+  "question": "Why can measuring AI risk early in the lifecycle give different results than later?",
+  "source": "nist-ai-rmf.pdf",
+  "evidence": "Measuring risk at an earlier stage in the AI lifecycle may yield different results",
+  "heading": "Part 1: Foundational Information 1. Framing Risk",
+  "page": 11
+ },
+ {
+  "id": "c01",
+  "question": "Who is the NIST Cybersecurity Framework 2.0 intended for?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "regardless of its size, sector, or maturity",
+  "heading": "Abstract",
+  "page": 2
+ },
+ {
+  "id": "c02",
+  "question": "Does the CSF prescribe how to achieve cybersecurity outcomes?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "The CSF does not prescribe how outcomes should be achieved.",
+  "heading": "Abstract",
+  "page": 2
+ },
+ {
+  "id": "c03",
+  "question": "What are the components of the CSF Core hierarchy?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "hierarchy of Functions, Categories, and Subcategories",
+  "heading": "1. Cybersecurity Framework (CSF) Overview",
+  "page": 6
+ },
+ {
+  "id": "c04",
+  "question": "What are CSF Organizational Profiles used for?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "describing an organization’s current and/or target cybersecurity posture",
+  "heading": "1. Cybersecurity Framework (CSF) Overview",
+  "page": 6
+ },
+ {
+  "id": "c05",
+  "question": "What are CSF Tiers used to characterize?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "characterize the rigor of an organization’s cybersecurity risk governance and management practices",
+  "heading": "1. Cybersecurity Framework (CSF) Overview",
+  "page": 6
+ },
+ {
+  "id": "c06",
+  "question": "What new features does CSF 2.0 highlight?",
+  "source": "nist-csf-2.pdf",
+  "evidence": "the importance of governance and supply chains",
+  "heading": "Preface",
+  "page": 5
+ }
+]

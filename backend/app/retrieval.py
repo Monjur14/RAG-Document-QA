@@ -30,6 +30,7 @@ class RetrievedChunk:
     vector_score: float | None = None   # cosine similarity, when the chunk came from vector search
     vector_rank: int | None = None      # 1-based rank in the vector candidate list
     keyword_rank: int | None = None     # 1-based rank in the keyword candidate list
+    rerank_score: float | None = None   # cross-encoder score, when the hit was reranked
 
 
 _COLUMNS = "c.id, c.document_id, c.chunk_index, c.source, c.heading, c.page, c.text"
@@ -125,8 +126,17 @@ def search(
     file_types: list[str] | None = None,
     document_ids: list[int] | None = None,
     candidates: int = 50,
+    reranker=None,
+    rerank_pool: int = 20,
 ) -> list[RetrievedChunk]:
-    """Top-k chunks for a question. `candidates` is how many each retriever contributes to the fusion."""
+    """Top-k chunks for a question. `candidates` is how many each retriever contributes to the fusion.
+    With a `reranker`, the top `rerank_pool` hits of the chosen mode are re-scored and cut to k."""
+    if reranker is not None:
+        from app.rerank import rerank
+
+        pool = search(conn, embedder, query, k=max(rerank_pool, k), mode=mode, file_types=file_types,
+                      document_ids=document_ids, candidates=candidates)
+        return rerank(query, pool, reranker, k)
     if mode == "keyword":
         return keyword_search(conn, query, k, file_types, document_ids)
     q = embedder.embed_query(query)
