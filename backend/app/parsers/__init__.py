@@ -1,11 +1,14 @@
 from pathlib import Path
 
 from app.models import ParsedSection
+from app.parsers.docx import parse_docx
+from app.parsers.errors import MalformedFile, UnsupportedFormat
 from app.parsers.html import parse_html
 from app.parsers.markdown import parse_markdown
+from app.parsers.pdf import parse_pdf
 from app.parsers.text import parse_txt
 
-_PARSERS = {
+_TEXT_PARSERS = {
     ".txt": parse_txt,
     ".md": parse_markdown,
     ".markdown": parse_markdown,
@@ -14,12 +17,13 @@ _PARSERS = {
 }
 
 
-class UnsupportedFormat(ValueError):
-    pass
+# Binary formats take raw bytes; pdf/docx libraries are imported lazily inside the parsers.
+_BINARY_PARSERS = {
+    ".pdf": parse_pdf,
+    ".docx": parse_docx,
+}
 
-
-class MalformedFile(ValueError):
-    pass
+__all__ = ["MalformedFile", "UnsupportedFormat", "decode_text", "parse_file"]
 
 
 def decode_text(raw: bytes) -> str:
@@ -35,7 +39,10 @@ def decode_text(raw: bytes) -> str:
 def parse_file(filename: str, raw: bytes) -> list[ParsedSection]:
     """Single entry point for parsing. Can later run in a sandboxed subprocess."""
     ext = Path(filename).suffix.lower()
-    parser = _PARSERS.get(ext)
+    binary = _BINARY_PARSERS.get(ext)
+    if binary is not None:
+        return binary(raw, filename)
+    parser = _TEXT_PARSERS.get(ext)
     if parser is None:
         raise UnsupportedFormat(f"Unsupported file type: {ext or '(none)'}")
     return parser(decode_text(raw), filename)

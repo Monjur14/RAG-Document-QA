@@ -142,3 +142,32 @@ def test_ask_maps_provider_failure_to_502(client, monkeypatch):
 def test_ask_validates_input():
     assert plain.post("/ask", json={"question": ""}).status_code == 422
     assert plain.post("/ask", json={"question": "x" * 501}).status_code == 422
+
+
+def test_upload_pdf_and_docx_end_to_end(client):
+    pytest.importorskip("pdfplumber")
+    pytest.importorskip("docx")
+    pytest.importorskip("reportlab")
+    from tests import make_docs
+
+    r = _upload(client, _name("guide.pdf"), make_docs.make_pdf())
+    assert r.status_code == 200, r.text
+    assert r.json()["file_type"] == "pdf" and r.json()["chunks"] >= 2
+    assert {s["page"] for s in r.json()["preview"]} <= {1, 2}
+
+    r = _upload(client, _name("hb.docx"), make_docs.make_docx())
+    assert r.status_code == 200, r.text
+    assert r.json()["file_type"] == "docx"
+
+
+def test_scanned_pdf_gets_ocr_hint():
+    pytest.importorskip("pdfplumber")
+    pytest.importorskip("reportlab")
+    from tests import make_docs
+
+    r = _upload(plain, "scan.pdf", make_docs.make_pdf(blank_page=True))
+    assert r.status_code == 422 and "OCR" in r.text
+
+
+def test_rejects_corrupt_pdf():
+    assert _upload(plain, "x.pdf", b"%PDF-1.4 garbage").status_code == 422

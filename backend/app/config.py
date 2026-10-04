@@ -10,8 +10,10 @@ MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "20"))
 MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
 UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", "./uploads"))
 
-# Formats currently supported. PDF/DOCX arrive in Week 2.
-ALLOWED_EXTENSIONS = {".txt", ".md", ".markdown", ".html", ".htm"}
+ALLOWED_EXTENSIONS = {".txt", ".md", ".markdown", ".html", ".htm", ".pdf", ".docx"}
+# Parser safety limits (read at call time so tests can override them).
+MAX_PDF_PAGES = int(os.getenv("MAX_PDF_PAGES", "500"))
+MAX_DOCX_UNCOMPRESSED_BYTES = int(os.getenv("MAX_DOCX_UNCOMPRESSED_MB", "100")) * 1024 * 1024
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://rag:rag@localhost:5433/rag")
 # Fail fast (instead of hanging) when the database is down, e.g. Docker not running.

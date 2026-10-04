@@ -46,11 +46,12 @@ def ingest_document(
 ) -> IngestResult:
     """Raises UnsupportedFormat / MalformedFile / EmptyDocument before touching the database,
     and IngestionFailed (after recording the failure) if embedding or storing goes wrong."""
+    file_type = Path(filename).suffix.lower().lstrip(".")
     sections = parse_file(filename, raw)
     if not sections:
-        raise EmptyDocument("No extractable text found in file")
+        hint = " (scanned PDF? OCR is not supported yet)" if file_type == "pdf" else ""
+        raise EmptyDocument("No extractable text found in file" + hint)
     chunks = chunk_sections(sections, cfg)
-    file_type = Path(filename).suffix.lower().lstrip(".")
 
     conn = connect()
     try:
