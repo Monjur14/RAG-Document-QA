@@ -7,3 +7,7 @@ UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", "./uploads"))
 
 # Formats currently supported. PDF/DOCX arrive in Week 2.
 ALLOWED_EXTENSIONS = {".txt", ".md", ".markdown", ".html", ".htm"}
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://rag:rag@localhost:5433/rag")
+# Must match the embedding model (bge-small-en-v1.5 = 384). Changing it needs a re-index.
+EMBEDDING_DIM = 384
