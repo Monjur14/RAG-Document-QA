@@ -4,7 +4,9 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Read settings from the repo-root .env if present (real environment variables win).
-load_dotenv(Path(__file__).resolve().parents[2] / ".env")
+# The sandboxed parser process must not read it (it has no use for the API keys).
+if not os.getenv("RAG_SANDBOX_WORKER"):
+    load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 MAX_UPLOAD_MB = int(os.getenv("MAX_UPLOAD_MB", "20"))
 MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
@@ -37,6 +39,14 @@ GUARDRAILS_ENABLED = _flag("GUARDRAILS_ENABLED")        # block attack-shaped qu
 SCAN_ENABLED = _flag("SCAN_ENABLED")                    # scan uploads, quarantine chunks that carry instructions
 OUTPUT_GUARD_ENABLED = _flag("OUTPUT_GUARD_ENABLED")    # block prompt leaks, strip links to foreign hosts
 REDACT_ENABLED = _flag("REDACT_ENABLED")                # mask secrets / personal data in answers and citations
+
+# --- upload safety and abuse limits ---
+SANDBOX_PARSING = _flag("SANDBOX_PARSING")                          # parse uploads in a child process (app/sandbox.py)
+SANDBOX_TIMEOUT_S = float(os.getenv("SANDBOX_TIMEOUT_S", "60"))
+SANDBOX_MAX_MEMORY_MB = int(os.getenv("SANDBOX_MAX_MEMORY_MB", "2048"))   # Linux/macOS only
+RATE_LIMIT_ENABLED = _flag("RATE_LIMIT_ENABLED")
+RATE_LIMIT_ASK_PER_MIN = int(os.getenv("RATE_LIMIT_ASK_PER_MIN", "30"))       # per client IP; 0 = unlimited
+RATE_LIMIT_UPLOAD_PER_MIN = int(os.getenv("RATE_LIMIT_UPLOAD_PER_MIN", "10"))
 
 CACHE_ENABLED = os.getenv("CACHE_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
 SEMANTIC_CACHE_THRESHOLD = float(os.getenv("SEMANTIC_CACHE_THRESHOLD", "0.95"))  # cosine; high = only near-identical wording

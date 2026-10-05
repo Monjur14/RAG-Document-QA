@@ -14,7 +14,7 @@ from app import repository as repo
 from app.chunking import ChunkConfig, chunk_sections
 from app.embeddings import Embedder, chunk_embedding_text
 from app.models import ParsedSection
-from app.parsers import parse_file
+from app.sandbox import parse_upload
 from app.scanner import scan_text
 
 
@@ -64,7 +64,7 @@ def ingest_document(
     """Raises UnsupportedFormat / MalformedFile / EmptyDocument before touching the database,
     and IngestionFailed (after recording the failure) if embedding or storing goes wrong."""
     file_type = Path(filename).suffix.lower().lstrip(".")
-    sections = parse_file(filename, raw)
+    sections = parse_upload(filename, raw)
     if not sections:
         hint = " (scanned PDF? OCR is not supported yet)" if file_type == "pdf" else ""
         raise EmptyDocument("No extractable text found in file" + hint)

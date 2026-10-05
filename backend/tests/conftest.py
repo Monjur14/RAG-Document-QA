@@ -2,7 +2,15 @@ import psycopg
 import pytest
 import sqlalchemy.exc
 
+from app import ratelimit
 from app.db import migrate
+
+
+@pytest.fixture(autouse=True)
+def _fresh_rate_limits():
+    ratelimit.reset()
+    yield
+    ratelimit.reset()
 
 
 @pytest.fixture(scope="session")

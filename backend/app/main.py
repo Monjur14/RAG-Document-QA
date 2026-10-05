@@ -18,6 +18,7 @@ from app.ingest import EmptyDocument, IngestionFailed, ingest_document
 from app.models import AskRequest, AskResponse, DocumentInfo, SearchHit, SearchRequest, UploadResponse
 from app.parsers import MalformedFile, UnsupportedFormat
 from app.providers import LLMProvider, ProviderError, get_provider
+from app.ratelimit import rate_limit
 from app.retrieval import search
 
 app = FastAPI(title="Secure RAG Document Q&A")
@@ -57,7 +58,7 @@ async def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.post("/documents/upload", response_model=UploadResponse)
+@app.post("/documents/upload", response_model=UploadResponse, dependencies=[Depends(rate_limit("upload"))])
 async def upload_document(
     file: UploadFile,
     embedder: Embedder = Depends(embedder_dep),
@@ -143,7 +144,7 @@ async def metrics(hours: float | None = None, connect: Callable = Depends(connec
         raise HTTPException(503, "Database unavailable") from exc
 
 
-@app.post("/ask", response_model=AskResponse)
+@app.post("/ask", response_model=AskResponse, dependencies=[Depends(rate_limit("ask"))])
 async def ask(
     req: AskRequest,
     embedder: Embedder = Depends(embedder_dep),
