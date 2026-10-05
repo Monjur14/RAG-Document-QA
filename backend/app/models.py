@@ -22,6 +22,8 @@ class UploadResponse(BaseModel):
     chunks: int
     characters: int
     preview: list[ParsedSection]
+    quarantined: int = 0          # chunks held back from search because they look like instructions
+    flags: list[str] = []
 
 
 class DocumentInfo(BaseModel):
@@ -77,7 +79,7 @@ class CitationOut(BaseModel):
 class AskResponse(BaseModel):
     question: str
     answer: str
-    status: Literal["answered", "insufficient_evidence", "model_declined", "uncited"]
+    status: Literal["answered", "insufficient_evidence", "model_declined", "uncited", "blocked"]
     citations: list[CitationOut]
     confidence: float | None
     model: str | None
@@ -86,3 +88,4 @@ class AskResponse(BaseModel):
     latency_ms: float
     retrieved: int
     cache: Literal["miss", "exact", "semantic"] = "miss"
+    flags: list[str] = []

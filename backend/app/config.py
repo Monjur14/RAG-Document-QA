@@ -26,6 +26,18 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
 RERANK_MODEL = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
 # /ask reorders the retrieved candidates with the cross-encoder (adds ~1 GB of model memory and ~80 ms).
 RERANK_ENABLED = os.getenv("RERANK_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
+
+
+def _flag(name: str, default: bool = True) -> bool:
+    return os.getenv(name, str(default)).strip().lower() not in ("0", "false", "no", "off")
+
+
+# --- security layers (each can be switched off for ablation tests; all on by default) ---
+GUARDRAILS_ENABLED = _flag("GUARDRAILS_ENABLED")        # block attack-shaped questions before retrieval
+SCAN_ENABLED = _flag("SCAN_ENABLED")                    # scan uploads, quarantine chunks that carry instructions
+OUTPUT_GUARD_ENABLED = _flag("OUTPUT_GUARD_ENABLED")    # block prompt leaks, strip links to foreign hosts
+REDACT_ENABLED = _flag("REDACT_ENABLED")                # mask secrets / personal data in answers and citations
+
 CACHE_ENABLED = os.getenv("CACHE_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
 SEMANTIC_CACHE_THRESHOLD = float(os.getenv("SEMANTIC_CACHE_THRESHOLD", "0.95"))  # cosine; high = only near-identical wording
 RERANK_POOL = int(os.getenv("RERANK_POOL", "20"))

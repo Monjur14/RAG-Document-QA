@@ -29,14 +29,14 @@ def add_chunks(
     if embeddings is not None and len(embeddings) != len(chunks):
         raise ValueError("embeddings and chunks must have the same length")
     rows = [
-        (doc_id, c.chunk_index, c.text, c.heading, c.page, c.source,
+        (doc_id, c.chunk_index, c.text, c.heading, c.page, c.source, c.flags, c.quarantined,
          Vector(list(embeddings[i])) if embeddings is not None else None)
         for i, c in enumerate(chunks)
     ]
     with conn.cursor() as cur:
         cur.executemany(
-            "INSERT INTO chunks (document_id, chunk_index, text, heading, page, source, embedding) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+            "INSERT INTO chunks (document_id, chunk_index, text, heading, page, source, flags, quarantined, embedding) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
             rows,
         )
 

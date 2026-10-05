@@ -4,16 +4,18 @@ A document row is committed (status 'pending') before the slow/risky steps, so a
 recorded on the document as status 'failed' with the reason, never silent and never half-indexed.
 """
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import psycopg
 
+from app import config
 from app import repository as repo
 from app.chunking import ChunkConfig, chunk_sections
 from app.embeddings import Embedder, chunk_embedding_text
 from app.models import ParsedSection
 from app.parsers import parse_file
+from app.scanner import scan_text
 
 
 class EmptyDocument(ValueError):
@@ -35,6 +37,20 @@ class IngestResult:
     chunks: int
     characters: int
     preview: list[ParsedSection]
+    quarantined: int = 0                       # chunks stored but excluded from retrieval
+    flags: list[str] = field(default_factory=list)   # distinct scanner findings
+
+
+def _scan_chunks(chunks) -> list[str]:
+    """Scan every chunk: strip invisible characters, flag instruction-like text, quarantine the dangerous ones.
+    Returns the distinct flags found. Quarantined chunks stay in the database (so nothing silently disappears)
+    but are filtered out of every search."""
+    found: list[str] = []
+    for c in chunks:
+        r = scan_text(c.text)
+        c.text, c.flags, c.quarantined = r.clean_text, r.flags, r.quarantine
+        found += [f for f in r.flags if f not in found]
+    return found
 
 
 def ingest_document(
@@ -52,6 +68,7 @@ def ingest_document(
         hint = " (scanned PDF? OCR is not supported yet)" if file_type == "pdf" else ""
         raise EmptyDocument("No extractable text found in file" + hint)
     chunks = chunk_sections(sections, cfg)
+    flags = _scan_chunks(chunks) if config.SCAN_ENABLED else []
 
     conn = connect()
     try:
@@ -78,4 +95,6 @@ def ingest_document(
         chunks=len(chunks),
         characters=sum(len(s.text) for s in sections),
         preview=sections[:3],
+        quarantined=sum(c.quarantined for c in chunks),
+        flags=flags,
     )

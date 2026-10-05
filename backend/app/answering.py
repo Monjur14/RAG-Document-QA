@@ -5,6 +5,7 @@ Statuses:
   insufficient_evidence  retrieval was too weak; the LLM was NOT called (saves time and cost)
   model_declined         the model itself said "I don't know"
   uncited                the model answered but cited nothing valid; treat as unverified
+  blocked                a security layer stopped the request or the reply (see `flags` for which one)
 """
 import re
 import time
@@ -15,11 +16,14 @@ import psycopg
 
 from app import config
 from app.embeddings import Embedder
+from app.guardrails import BLOCKED_MESSAGE, check_question
+from app.output_guard import guard_output
 from app.providers import LLMProvider
+from app.redact import redact
 from app.rerank import rerank
 from app.retrieval import Mode, RetrievedChunk, search
 
-Status = Literal["answered", "insufficient_evidence", "model_declined", "uncited"]
+Status = Literal["answered", "insufficient_evidence", "model_declined", "uncited", "blocked"]
 IDK = "I don't know."
 
 SYSTEM_PROMPT = """You are a careful assistant that answers questions using ONLY the numbered sources inside <sources> tags.
@@ -60,6 +64,7 @@ class Answer:
     latency_ms: float = 0.0
     retrieved: int = 0
     cache: str = "miss"                 # "miss", "exact" or "semantic" (see app/cache.py)
+    flags: list[str] = field(default_factory=list)   # security events, e.g. "blocked_input:override", "redacted_email"
 
 
 def _attr(value: str | None) -> str:
@@ -130,6 +135,13 @@ def answer_question(
     k = k or config.ANSWER_TOP_K
     min_score = config.MIN_VECTOR_SCORE if min_score is None else min_score
 
+    if config.GUARDRAILS_ENABLED:
+        hits = check_question(question)
+        if hits:
+            return Answer(question=question, answer=BLOCKED_MESSAGE, status="blocked",
+                          flags=[f"blocked_input:{h}" for h in hits],
+                          latency_ms=(time.perf_counter() - t0) * 1000)
+
     if reranker is not None:
         # Confidence comes from the whole candidate pool, not just the reranked top k: the reranker may
         # push the highest-cosine chunk out of the top k, which must not turn a good match into a refusal.
@@ -168,9 +180,24 @@ def answer_question(
     if not has_content(text):  # still nothing but a citation after the retry: nothing to verify
         return done(answer=text, status="uncited", **usage)
 
+    flags: list[str] = []
+    if config.OUTPUT_GUARD_ENABLED:
+        text, actions, blocked = guard_output(text, SYSTEM_PROMPT, [c.text for c in chunks])
+        flags += actions
+        if blocked:
+            return done(answer=BLOCKED_MESSAGE, status="blocked", flags=flags, **usage)
+        if not has_content(text):
+            return done(answer=text, status="uncited", flags=flags, **usage)
+
     cites = [
         Citation(i, c.chunk_id, c.document_id, c.source, c.heading, c.page, c.text)
         for i in extract_citation_indexes(text, len(chunks))
         for c in [chunks[i - 1]]
     ]
-    return done(answer=text, status="answered" if cites else "uncited", citations=cites, **usage)
+    if config.REDACT_ENABLED:
+        text, kinds = redact(text)
+        flags += [f"redacted_{k}" for k in kinds if f"redacted_{k}" not in flags]
+        for c in cites:
+            c.text, kinds = redact(c.text)
+            flags += [f"redacted_{k}" for k in kinds if f"redacted_{k}" not in flags]
+    return done(answer=text, status="answered" if cites else "uncited", citations=cites, flags=flags, **usage)

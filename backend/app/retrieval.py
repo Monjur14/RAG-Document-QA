@@ -37,7 +37,7 @@ _COLUMNS = "c.id, c.document_id, c.chunk_index, c.source, c.heading, c.page, c.t
 
 
 def _filters(file_types: list[str] | None, document_ids: list[int] | None) -> tuple[str, dict]:
-    clauses = ["d.status = 'indexed'"]  # never search documents that are pending or failed
+    clauses = ["d.status = 'indexed'", "NOT c.quarantined"]  # never search pending/failed documents or chunks the scanner quarantined
     params: dict = {}
     if file_types:
         clauses.append("d.file_type = ANY(%(file_types)s)")

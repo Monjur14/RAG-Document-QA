@@ -33,6 +33,8 @@ class Chunk(BaseModel):
     source: str
     heading: str | None = None
     page: int | None = None
+    flags: list[str] = []        # findings of the ingestion scanner (see app/scanner.py)
+    quarantined: bool = False    # stored, but never retrieved
 
 
 def _split_text(text: str, size: int, overlap: int) -> list[tuple[int, str]]:

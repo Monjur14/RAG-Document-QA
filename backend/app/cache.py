@@ -46,6 +46,7 @@ def make_scope(provider, *, k, mode, min_score, file_types, document_ids, rerank
         "file_types": sorted(file_types or []), "document_ids": sorted(document_ids or []),
         "reranker": getattr(reranker, "model_name", type(reranker).__name__) if reranker is not None else None,
         "rerank_pool": config.RERANK_POOL if reranker is not None else None,
+        "security": [config.GUARDRAILS_ENABLED, config.OUTPUT_GUARD_ENABLED, config.REDACT_ENABLED],
     }, sort_keys=True))
 
 
