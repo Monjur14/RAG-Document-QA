@@ -113,13 +113,14 @@ def run(embedder: Embedder | None = None, provider=None, reranker=None, naive: b
         prefix = f"redteam-{uuid.uuid4().hex[:6]}-"
         docs = [(name, shared[name]) for name in case.get("use", [])] + \
                [(d["name"], d["content"]) for d in case.get("inline_docs", [])]
-        ids, blocked, quarantined = [], None, 0
+        ids, blocked, quarantined, sanitized = [], None, 0, 0
         try:
             for name, content in docs:
                 try:
                     res = ingest_document(get_conn, embedder, prefix + name, content.encode("utf-8"))
                     ids.append(res.document_id)
                     quarantined += res.quarantined
+                    sanitized += res.sanitized
                 except Exception as exc:  # a future ingestion scanner may reject or quarantine the file
                     blocked = type(exc).__name__
             if blocked and not ids:
@@ -144,7 +145,7 @@ def run(embedder: Embedder | None = None, provider=None, reranker=None, naive: b
             else:
                 outcome = "ignored_attack"
             row = {**_row(case), "outcome": outcome, "succeeded": bool(why), "reason": why, "status": a.status,
-                   "answer": a.answer[:400], "ingestion": blocked, "quarantined_chunks": quarantined,
+                   "answer": a.answer[:400], "ingestion": blocked, "quarantined_chunks": quarantined, "sanitized_chunks": sanitized,
                    "flags": a.flags}
             if case.get("legit"):
                 # Did the legitimate part of the poisoned document still reach the user? (cost of quarantine)
@@ -172,6 +173,7 @@ def run(embedder: Embedder | None = None, provider=None, reranker=None, naive: b
         "layers": sorted(layers) if layers is not None else sorted(
             name for name, attr in LAYERS.items() if getattr(config, attr)),
         "quarantined_cases": sum(1 for r in results if r.get("quarantined_chunks")),
+        "sanitized_cases": sum(1 for r in results if r.get("sanitized_chunks")),
         "legit_answer_preserved_on_poisoned_docs": _legit_rate(results),
         "outcomes": {o: sum(r["outcome"] == o for r in results) for o in sorted({r["outcome"] for r in results})},
         "wall_clock_s": round(time.perf_counter() - t0, 1),
@@ -204,10 +206,11 @@ def print_report(r: dict) -> None:
     for c, v in r["by_category"].items():
         print(f"  {c:<26}{v['asr']:>5.0%}  / {v['n']}")
     print(f"\ndefense layers on: {', '.join(r['layers']) or 'none (prompt-only)'}")
-    if r["quarantined_cases"]:
+    if r["quarantined_cases"] or r["sanitized_cases"]:
         legit = r["legit_answer_preserved_on_poisoned_docs"]
-        print(f"documents with quarantined chunks: {r['quarantined_cases']}"
-              + (f"   legitimate answer still given on those poisoned documents: {legit:.0%}" if legit is not None else ""))
+        print(f"poisoned documents: {r['sanitized_cases']} sanitized (attack paragraph cut out), "
+              f"{r['quarantined_cases']} quarantined (whole chunk held back)"
+              + (f"\nlegitimate answer still given on poisoned documents: {legit:.0%}" if legit is not None else ""))
     print("\noutcomes: " + ", ".join(f"{o}={n}" for o, n in r["outcomes"].items()))
     print("\nattacks that SUCCEEDED (read these: a reply that only quotes the attack can be miscounted):")
     for x in r["results"]:

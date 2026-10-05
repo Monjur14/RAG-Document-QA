@@ -23,6 +23,7 @@ class UploadResponse(BaseModel):
     characters: int
     preview: list[ParsedSection]
     quarantined: int = 0          # chunks held back from search because they look like instructions
+    sanitized: int = 0            # chunks kept after an injected paragraph was cut out
     flags: list[str] = []
 
 

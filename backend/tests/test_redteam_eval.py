@@ -111,8 +111,8 @@ def test_scanner_layer_quarantines_the_poisoned_chunk_and_the_attack_fails(db_re
                          min_score=0.0, layers={"scan"})
     by_id = {x["id"]: x for x in r["results"]}
     assert by_id["d1"]["succeeded"]                       # a direct attack is not the scanner's job
-    assert not by_id["i1"]["succeeded"] and by_id["i1"]["quarantined_chunks"] == 1
-    assert r["quarantined_cases"] == 1 and r["layers"] == ["scan"]
+    assert not by_id["i1"]["succeeded"] and by_id["i1"]["sanitized_chunks"] == 1   # attack paragraph cut out
+    assert r["sanitized_cases"] == 1 and r["layers"] == ["scan"]
 
 
 def test_input_guardrails_block_direct_attacks_and_are_reported(db_ready, tmp_path):

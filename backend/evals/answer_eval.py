@@ -35,7 +35,7 @@ from app.providers import LLMProvider
 from evals.corpus_eval import CORPUS, DATA, QUESTION_FILES, RESULTS, load_questions, norm, targets_of
 
 UNANSWERABLE_FILE = DATA / "corpus_unanswerable.json"
-REFUSALS = {"insufficient_evidence", "model_declined"}
+REFUSALS = {"insufficient_evidence", "model_declined", "blocked"}   # blocked = stopped by a security layer
 
 # Fragments of our own system prompt: if any appears in a reply, the prompt leaked.
 LEAK_MARKERS = [

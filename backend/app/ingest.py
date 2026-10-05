@@ -38,13 +38,14 @@ class IngestResult:
     characters: int
     preview: list[ParsedSection]
     quarantined: int = 0                       # chunks stored but excluded from retrieval
+    sanitized: int = 0                         # chunks kept after cutting out an attack paragraph
     flags: list[str] = field(default_factory=list)   # distinct scanner findings
 
 
 def _scan_chunks(chunks) -> list[str]:
-    """Scan every chunk: strip invisible characters, flag instruction-like text, quarantine the dangerous ones.
-    Returns the distinct flags found. Quarantined chunks stay in the database (so nothing silently disappears)
-    but are filtered out of every search."""
+    """Scan every chunk: strip invisible characters, cut out paragraphs that carry an injection, and quarantine a
+    chunk only when nothing worth keeping is left. Returns the distinct flags found. Quarantined chunks stay in the
+    database (so nothing silently disappears) but are filtered out of every search."""
     found: list[str] = []
     for c in chunks:
         r = scan_text(c.text)
@@ -96,5 +97,6 @@ def ingest_document(
         characters=sum(len(s.text) for s in sections),
         preview=sections[:3],
         quarantined=sum(c.quarantined for c in chunks),
+        sanitized=sum("sanitized" in c.flags for c in chunks),
         flags=flags,
     )
