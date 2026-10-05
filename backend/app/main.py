@@ -13,6 +13,7 @@ from app.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, MAX_UPLOAD_MB
 from app.cache import answer_with_cache
 from app.db import get_conn
 from app.embeddings import Embedder, get_embedder
+from app.eval_results import latest_results
 from app.metrics import log_request, summary
 from app.ingest import EmptyDocument, IngestionFailed, ingest_document
 from app.models import AskRequest, AskResponse, DocumentInfo, SearchHit, SearchRequest, UploadResponse
@@ -142,6 +143,12 @@ async def metrics(hours: float | None = None, connect: Callable = Depends(connec
         return await run_in_threadpool(_with_conn, connect, lambda conn: summary(conn, hours))
     except psycopg.OperationalError as exc:
         raise HTTPException(503, "Database unavailable") from exc
+
+
+@app.get("/evals/latest")
+async def evals_latest() -> dict:
+    """Newest saved result of each eval type (read-only, for the metrics page). Missing types are null."""
+    return await run_in_threadpool(latest_results)
 
 
 @app.post("/ask", response_model=AskResponse, dependencies=[Depends(rate_limit("ask"))])

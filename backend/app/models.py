@@ -35,6 +35,9 @@ class DocumentInfo(BaseModel):
     error: str | None
     created_at: datetime
     chunk_count: int
+    quarantined: int = 0          # chunks held back from search by the ingestion scanner
+    sanitized: int = 0            # chunks kept after an injected paragraph was cut out
+    flags: list[str] = []         # distinct scanner findings across the document's chunks
 
 
 class SearchRequest(BaseModel):

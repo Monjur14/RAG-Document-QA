@@ -44,10 +44,17 @@ def add_chunks(
 def list_documents(conn: psycopg.Connection) -> list[dict]:
     cur = conn.execute(
         "SELECT d.id, d.filename, d.file_type, d.status, d.error, d.created_at, "
-        "       (SELECT count(*) FROM chunks c WHERE c.document_id = d.id) "
+        "       (SELECT count(*) FROM chunks c WHERE c.document_id = d.id), "
+        "       (SELECT count(*) FROM chunks c WHERE c.document_id = d.id AND c.quarantined), "
+        "       (SELECT count(*) FROM chunks c WHERE c.document_id = d.id AND 'sanitized' = ANY(c.flags)), "
+        "       (SELECT COALESCE(array_agg(DISTINCT f ORDER BY f), '{}') "
+        "          FROM chunks c, unnest(c.flags) AS f WHERE c.document_id = d.id) "
         "FROM documents d ORDER BY d.id DESC"
     )
-    keys = ["id", "filename", "file_type", "status", "error", "created_at", "chunk_count"]
+    # quarantined / sanitized / flags are derived from the chunks, so the library page can show scanner
+    # results after a reload (the upload response alone is gone once the page refreshes).
+    keys = ["id", "filename", "file_type", "status", "error", "created_at", "chunk_count",
+            "quarantined", "sanitized", "flags"]
     return [dict(zip(keys, r)) for r in cur.fetchall()]
 
 

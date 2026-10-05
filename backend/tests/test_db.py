@@ -47,6 +47,24 @@ def test_create_list_and_delete_cascade(conn):
     assert repo.delete_document(conn, doc) is False
 
 
+def test_list_documents_reports_scanner_results(conn):
+    doc = repo.create_document(conn, "a.md", "md")
+    chunks = make_chunks(["clean", "cut", "held back"])
+    chunks[1].flags = ["sanitized", "instruction_override"]
+    chunks[2].flags, chunks[2].quarantined = ["instruction_override"], True
+    repo.add_chunks(conn, doc, chunks)
+    d = [x for x in repo.list_documents(conn) if x["id"] == doc][0]
+    assert (d["chunk_count"], d["quarantined"], d["sanitized"]) == (3, 1, 1)
+    assert d["flags"] == ["instruction_override", "sanitized"]
+
+
+def test_list_documents_clean_document_has_no_flags(conn):
+    doc = repo.create_document(conn, "a.md", "md")
+    repo.add_chunks(conn, doc, make_chunks(["one"]))
+    d = [x for x in repo.list_documents(conn) if x["id"] == doc][0]
+    assert (d["quarantined"], d["sanitized"], d["flags"]) == (0, 0, [])
+
+
 def test_set_status(conn):
     doc = repo.create_document(conn, "a.md", "md")
     repo.set_status(conn, doc, "failed", "bad file")
