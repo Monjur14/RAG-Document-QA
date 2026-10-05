@@ -85,3 +85,4 @@ class AskResponse(BaseModel):
     completion_tokens: int | None
     latency_ms: float
     retrieved: int
+    cache: Literal["miss", "exact", "semantic"] = "miss"

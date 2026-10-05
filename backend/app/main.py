@@ -1,3 +1,4 @@
+import time
 from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
@@ -9,9 +10,10 @@ from fastapi.concurrency import run_in_threadpool
 from app import config
 from app import repository as repo
 from app.config import ALLOWED_EXTENSIONS, MAX_UPLOAD_BYTES, MAX_UPLOAD_MB
-from app.answering import answer_question
+from app.cache import answer_with_cache
 from app.db import get_conn
 from app.embeddings import Embedder, get_embedder
+from app.metrics import log_request, summary
 from app.ingest import EmptyDocument, IngestionFailed, ingest_document
 from app.models import AskRequest, AskResponse, DocumentInfo, SearchHit, SearchRequest, UploadResponse
 from app.parsers import MalformedFile, UnsupportedFormat
@@ -132,6 +134,15 @@ async def search_chunks(
     return [SearchHit(**h.__dict__) for h in hits]
 
 
+@app.get("/metrics")
+async def metrics(hours: float | None = None, connect: Callable = Depends(connect_dep)) -> dict:
+    """Cost, tokens, latency percentiles, cache hit rate and error rate (all time, or the last `hours`)."""
+    try:
+        return await run_in_threadpool(_with_conn, connect, lambda conn: summary(conn, hours))
+    except psycopg.OperationalError as exc:
+        raise HTTPException(503, "Database unavailable") from exc
+
+
 @app.post("/ask", response_model=AskResponse)
 async def ask(
     req: AskRequest,
@@ -141,10 +152,20 @@ async def ask(
     connect: Callable = Depends(connect_dep),
 ) -> AskResponse:
     def work(conn: psycopg.Connection):
-        return answer_question(
-            conn, embedder, provider, req.question, k=req.k, mode=req.mode,
-            file_types=req.file_types, document_ids=req.document_ids, reranker=reranker,
-        )
+        t0 = time.perf_counter()
+        try:
+            result = answer_with_cache(
+                conn, embedder, provider, req.question, k=req.k, mode=req.mode,
+                file_types=req.file_types, document_ids=req.document_ids, reranker=reranker,
+            )
+        except ProviderError as exc:
+            log_request(conn, question=req.question, status="error", error=type(exc).__name__,
+                        latency_ms=(time.perf_counter() - t0) * 1000, model=getattr(provider, "model", None))
+            raise
+        log_request(conn, question=req.question, status=result.status, latency_ms=result.latency_ms,
+                    cache=result.cache, model=result.model, prompt_tokens=result.prompt_tokens, completion_tokens=result.completion_tokens,
+                    retrieved=result.retrieved, confidence=result.confidence)
+        return result
 
     try:
         result = await run_in_threadpool(_with_conn, connect, work)

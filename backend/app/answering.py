@@ -59,6 +59,7 @@ class Answer:
     completion_tokens: int | None = None
     latency_ms: float = 0.0
     retrieved: int = 0
+    cache: str = "miss"                 # "miss", "exact" or "semantic" (see app/cache.py)
 
 
 def _attr(value: str | None) -> str:

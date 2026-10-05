@@ -1,0 +1,113 @@
+{
+  "timestamp": "2026-10-05T07:00:12",
+  "threshold": 0.95,
+  "reranker": "BAAI/bge-reranker-v2-m3",
+  "similarity": {
+    "n_rewordings": 30,
+    "n_near_misses": 14,
+    "n_other_questions": 82,
+    "rewording_sim": {
+      "min": 0.784,
+      "median": 0.964
+    },
+    "near_miss_sim": {
+      "max": 0.949,
+      "median": 0.838
+    },
+    "other_question_sim_max": 0.886,
+    "by_threshold": [
+      {
+        "threshold": 0.8,
+        "rewordings_hit": 0.933,
+        "near_misses_hit": 8,
+        "other_questions_hit": 15
+      },
+      {
+        "threshold": 0.85,
+        "rewordings_hit": 0.933,
+        "near_misses_hit": 7,
+        "other_questions_hit": 2
+      },
+      {
+        "threshold": 0.9,
+        "rewordings_hit": 0.9,
+        "near_misses_hit": 3,
+        "other_questions_hit": 0
+      },
+      {
+        "threshold": 0.92,
+        "rewordings_hit": 0.833,
+        "near_misses_hit": 2,
+        "other_questions_hit": 0
+      },
+      {
+        "threshold": 0.94,
+        "rewordings_hit": 0.667,
+        "near_misses_hit": 2,
+        "other_questions_hit": 0
+      },
+      {
+        "threshold": 0.95,
+        "rewordings_hit": 0.667,
+        "near_misses_hit": 0,
+        "other_questions_hit": 0
+      },
+      {
+        "threshold": 0.97,
+        "rewordings_hit": 0.433,
+        "near_misses_hit": 0,
+        "other_questions_hit": 0
+      }
+    ]
+  },
+  "model": "llama3.1:8b",
+  "workload": {
+    "questions": 30,
+    "requests": 90
+  },
+  "cache_off": {
+    "requests": 90,
+    "llm_calls": 90,
+    "exact_hits": 0,
+    "semantic_hits": 0,
+    "avg_latency_ms": 680.6,
+    "p50_ms": 538.8,
+    "p95_ms": 896.3,
+    "prompt_tokens": 93560,
+    "completion_tokens": 3657,
+    "est_cost_usd_if_hosted": 0.016228
+  },
+  "cache_on": {
+    "requests": 90,
+    "llm_calls": 40,
+    "exact_hits": 30,
+    "semantic_hits": 20,
+    "avg_latency_ms": 358.3,
+    "p50_ms": 66.2,
+    "p95_ms": 839.8,
+    "prompt_tokens": 42915,
+    "completion_tokens": 1569,
+    "est_cost_usd_if_hosted": 0.007379
+  },
+  "savings": {
+    "latency_avg": 0.474,
+    "prompt_tokens": 0.541,
+    "completion_tokens": 0.571,
+    "cost": 0.545,
+    "llm_calls": 0.556
+  },
+  "answer_still_supported": {
+    "cache_off": {
+      "original": 0.933,
+      "repeat": 0.833,
+      "reworded": 0.8
+    },
+    "cache_on": {
+      "original": 0.9,
+      "repeat": 0.9,
+      "reworded": 0.9
+    }
+  },
+  "rewordings_served_from_cache": 20,
+  "wrong_hits_on_near_misses": []
+}

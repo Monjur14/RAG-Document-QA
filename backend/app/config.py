@@ -26,6 +26,8 @@ EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
 RERANK_MODEL = os.getenv("RERANK_MODEL", "BAAI/bge-reranker-v2-m3")
 # /ask reorders the retrieved candidates with the cross-encoder (adds ~1 GB of model memory and ~80 ms).
 RERANK_ENABLED = os.getenv("RERANK_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
+CACHE_ENABLED = os.getenv("CACHE_ENABLED", "true").strip().lower() not in ("0", "false", "no", "off")
+SEMANTIC_CACHE_THRESHOLD = float(os.getenv("SEMANTIC_CACHE_THRESHOLD", "0.95"))  # cosine; high = only near-identical wording
 RERANK_POOL = int(os.getenv("RERANK_POOL", "20"))
 
 # --- LLM (answer generation) ---
@@ -35,6 +37,21 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "llama3.1:8b")
 OLLAMA_THINK = {"true": True, "false": False}.get(os.getenv("OLLAMA_THINK", "").strip().lower())
 OLLAMA_NUM_CTX = int(os.getenv("OLLAMA_NUM_CTX", "8192"))
 LLM_TIMEOUT_S = float(os.getenv("LLM_TIMEOUT_S", "120"))
+# Which LLM answers. LLM_PROVIDERS="auto" (default) uses every provider that has a key, in this order:
+#   OpenAI -> Gemini -> OpenRouter -> local Ollama (always last, needs no key)
+# So: an OpenAI key present -> OpenAI; else a Gemini key -> Gemini; no keys at all -> local Ollama. If a hosted
+# provider fails, the next one in the list answers. To force a specific chain, list names, e.g. LLM_PROVIDERS=gemini,ollama
+# API keys belong in the repo-root .env (git-ignored) or the server's environment: never in the repo, frontend or logs.
+LLM_PROVIDERS = os.getenv("LLM_PROVIDERS", "auto")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")        # model names and prices change: check OpenAI's pricing page
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")   # model names change: check Google's current list
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY", "")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.1-8b-instruct")
+LLM_MAX_RETRIES = int(os.getenv("LLM_MAX_RETRIES", "2"))       # extra tries per provider on connection errors / 429 / 5xx
+LLM_BACKOFF_S = float(os.getenv("LLM_BACKOFF_S", "0.5"))       # wait 0.5 s, then 1 s, ...
+LLM_COOLDOWN_S = float(os.getenv("LLM_COOLDOWN_S", "30"))      # skip a provider this long after it fails
 
 # --- answering ---
 ANSWER_TOP_K = int(os.getenv("ANSWER_TOP_K", "5"))

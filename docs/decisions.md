@@ -142,3 +142,44 @@ Results (102 questions, about 65 s on GPU):
 - Runs vary by 1-2 questions even at temperature 0 (f13 changed between runs), so differences that small are noise.
 - Open: cross-document questions are dominated by one document in the top 5 (a diversity step is a candidate), and the
   prompt-injection test so far only covers injection in the question, not inside an uploaded document (Week 4).
+
+## Week 3: logging, answer cache, provider fallback (2026-10-05)
+
+**Request log and /metrics.** Every `/ask` writes one row (`request_log`): status, cache result, model, tokens, estimated cost,
+latency, retrieved count, confidence. The question and answer text are never stored, only the question length. `/metrics`
+reports requests, error rate, cache hit rate, cost, tokens, p50/p95 latency (overall and for real LLM calls only) and
+which model answered. Local models cost $0; hosted prices live in `app/metrics.py` and must be checked against each provider.
+
+**Answer cache (exact + semantic).** Only `answered` results are cached. Each row is keyed by a `scope` (model, prompt,
+k, mode, threshold, reranker, document filter) and a `corpus` fingerprint (document count + highest document id), so
+uploading or deleting any document, or changing any setting, makes old rows stop matching. No explicit "clear cache"
+step can be forgotten. The cache never raises: a database problem falls back to answering normally.
+
+**Threshold chosen from data (`python -m evals.cache_eval`).** 30 hand-written rewordings and 14 near-miss questions
+(one word changed so the answer differs, e.g. ReDoc vs Swagger UI, CSF vs AI RMF):
+
+| threshold | rewordings that hit | near-misses that hit (wrong answer) |
+|---|---|---|
+| 0.90 | 0.90 | 3 |
+| 0.94 | 0.67 | 2 |
+| 0.95 | 0.67 | 0 |
+| 0.97 | 0.43 | 0 |
+
+0.95 is the lowest threshold with no wrong hit, and lowering it to 0.94 gained no extra rewordings while adding wrong
+hits. The margin is thin: the closest near-miss scored 0.949. Keep 0.95, and re-run the benchmark after changing the
+embedding model (scores are not comparable across models).
+
+**Replay results (90 requests: each of 30 questions asked, repeated with other casing, then reworded).**
+LLM calls 90 -> 40 (-56%), average latency 681 -> 358 ms (-47%), tokens -54%, cost -55% when priced as gpt-4o-mini
+(the local model really costs $0). 30 exact hits, 20 semantic hits, 0 wrong hits on near-misses; the cited passage still
+contained the labelled quote for 0.90 of cached answers. These savings depend on the workload (here two thirds of requests
+are repeats or rewordings, so 67% is the ceiling); a real hit rate is whatever `/metrics` reports. n=30 and the
+rewordings are hand-written, so treat the numbers as indicative.
+
+**Provider chain.** `LLM_PROVIDERS=auto` (default) uses every provider that has a key, in the order OpenAI, Gemini,
+OpenRouter, and always ends with local Ollama, so with no keys the app runs fully local. Connection errors and HTTP
+429/5xx are retried with exponential backoff (0.5 s, 1 s). Timeouts are not retried (a slow provider would only make the
+user wait longer), they move to the next provider. A failed provider is skipped for 30 s so a dead provider does not add
+retry delays to every request. Keys come from the environment or the git-ignored `.env`, travel only in headers, and are
+never logged. The cache scope uses the primary provider's model name, so an answer produced by a fallback model is cached
+under the primary's scope: acceptable for now, noted as a limitation.
