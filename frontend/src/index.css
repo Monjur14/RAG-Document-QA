@@ -1,0 +1,157 @@
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import 'tailwindcss';
+
+/*
+  Design tokens. Every color in the app comes from this file.
+  Light values live on :root; dark values replace them when the system is in dark mode.
+  @theme inline turns each one into a Tailwind utility: bg-surface, text-fg-muted, border-line, ...
+*/
+:root {
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --raised: #f5f5f5;
+  --hover: #f0f0f0;
+  --line: rgb(0 0 0 / 0.08);
+  --line-strong: rgb(0 0 0 / 0.16);
+
+  --fg: #171717;
+  --fg-secondary: #525252;
+  --fg-muted: #737373;
+
+  --accent: #5e6ad2;
+  --accent-hover: #4f5bc4;
+  --accent-text: #4b56bf;
+  --accent-soft: rgb(94 106 210 / 0.1);
+
+  /* Answer statuses: text color + tinted background, always paired with an icon and a label */
+  --ok: #15803d;
+  --ok-soft: rgb(21 128 61 / 0.1);
+  --warn: #a16207;
+  --warn-soft: rgb(161 98 7 / 0.1);
+  --caution: #c2410c;
+  --caution-soft: rgb(194 65 12 / 0.1);
+  --danger: #b91c1c;
+  --danger-soft: rgb(185 28 28 / 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #181818;
+    --surface: #1f1f1f;
+    --raised: #272727;
+    --hover: #313131;
+    --line: rgb(255 255 255 / 0.07);
+    --line-strong: rgb(255 255 255 / 0.14);
+
+    --fg: #f7f8f8;
+    --fg-secondary: #a1a6ae;
+    --fg-muted: #858b95;
+
+    --accent: #5e6ad2;
+    --accent-hover: #6e79da;
+    --accent-text: #9aa2ec;
+    --accent-soft: rgb(94 106 210 / 0.18);
+
+    --ok: #4ade80;
+    --ok-soft: rgb(74 222 128 / 0.12);
+    --warn: #facc15;
+    --warn-soft: rgb(250 204 21 / 0.12);
+    --caution: #fb923c;
+    --caution-soft: rgb(251 146 60 / 0.12);
+    --danger: #f87171;
+    --danger-soft: rgb(248 113 113 / 0.12);
+  }
+}
+
+@theme inline {
+  --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-hover: var(--hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-text: var(--accent-text);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-caution: var(--caution);
+  --color-caution-soft: var(--caution-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  /* One easing curve for every movement in the app */
+  --ease-fluid: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* "Working" bar for uploads, where there is no real percentage to show */
+  --animate-indeterminate: indeterminate 1.4s var(--ease-fluid) infinite;
+  @keyframes indeterminate {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(300%);
+    }
+  }
+
+  /* Citation panel: up from the bottom on phones, in from the right on wider screens */
+  --animate-sheet-up: sheet-up 300ms var(--ease-fluid);
+  --animate-sheet-left: sheet-left 300ms var(--ease-fluid);
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  @keyframes sheet-left {
+    from {
+      transform: translateX(100%);
+    }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  body {
+    @apply bg-bg font-sans text-sm text-fg antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* One visible focus ring for every focusable element, keyboard only */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
