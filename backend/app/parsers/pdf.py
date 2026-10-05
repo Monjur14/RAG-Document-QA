@@ -1,6 +1,7 @@
 """PDF parser (pdfplumber, MIT). Keeps page numbers, detects headings by font size/weight,
 and emits each ruled table as its own section. Scanned PDFs (no text layer) return []."""
 import io
+import re
 from collections import Counter
 from dataclasses import dataclass
 
@@ -8,8 +9,9 @@ from app import config
 from app.models import ParsedSection
 from app.parsers.errors import MalformedFile
 
-LINE_TOLERANCE = 3.0       # points: words whose tops differ less than this share a line
+LINE_TOLERANCE = 3.0       # points: words whose baselines differ less than this share a line
 HEADING_SIZE_RATIO = 1.15  # heading if font size >= body size * this
+HEADER_FOOTER_BAND = 0.08  # top/bottom fraction of the page where repeating lines count as running headers
 PARAGRAPH_GAP_RATIO = 0.6  # vertical gap above this * line height starts a new paragraph
 WORD_GAP_RATIO = 0.1       # word gap as a fraction of font size; the fixed default glues words in some PDFs
 
@@ -28,17 +30,40 @@ def _in_any(bboxes, x0, x1, top, bottom) -> bool:
     return any(b[0] <= cx <= b[2] and b[1] <= cy <= b[3] for b in bboxes)
 
 
+def _merge_small_caps(group: list[dict]) -> list[dict]:
+    """Join a larger capital with the smaller capitals that follow it on the same baseline: 'G' + 'OVERN'
+    is one word set in small caps, not two."""
+    out: list[dict] = []
+    for w in group:
+        prev = out[-1] if out else None
+        if (
+            prev is not None
+            and len(prev["text"]) == 1 and prev["text"].isupper()
+            and w["text"].isupper() and w["size"] < prev["size"] - 0.5
+            and 0 <= w["x0"] - prev["x1"] < 0.6 * prev["size"]
+        ):
+            out[-1] = {**prev, "text": prev["text"] + w["text"], "x1": w["x1"],
+                       "size": max(prev["size"], w["size"]), "top": min(prev["top"], w["top"]),
+                       "bottom": max(prev["bottom"], w["bottom"])}
+        else:
+            out.append(w)
+    return out
+
+
 def _group_lines(words: list[dict]) -> list[_Line]:
-    words = sorted(words, key=lambda w: (w["top"], w["x0"]))
+    # Group by baseline (bottom), not top: in small-caps or drop-cap text ("G" + "OVERN") the letters have
+    # different sizes, so their tops differ even though they sit on one line.
+    words = sorted(words, key=lambda w: (w["bottom"], w["x0"]))
     groups: list[list[dict]] = []
     for w in words:
-        if groups and abs(w["top"] - groups[-1][0]["top"]) <= LINE_TOLERANCE:
+        if groups and abs(w["bottom"] - groups[-1][0]["bottom"]) <= LINE_TOLERANCE:
             groups[-1].append(w)
         else:
             groups.append([w])
     lines = []
     for g in groups:
         g.sort(key=lambda w: w["x0"])
+        g = _merge_small_caps(g)
         text = " ".join(w["text"] for w in g).strip()
         if not text:
             continue
@@ -61,6 +86,39 @@ def _table_text(rows) -> str:
         if any(cells):
             out.append(" | ".join(cells))
     return "\n".join(out)
+
+
+_CAPTION = re.compile(r"^(fig\.?|figure|table)\s*\d+[.:]?\s", re.IGNORECASE)
+
+
+def _is_caption(text: str) -> bool:
+    """'Fig. 3. Steps ...' / 'Table 2 ...' are captions, not section headings: they must not replace the
+    real heading that the following paragraphs belong to."""
+    return bool(_CAPTION.match(text))
+
+
+def _signature(text: str) -> str:
+    """Line text with digits masked, so 'Page 3' and 'Page 4' count as the same running line."""
+    return "".join("#" if c.isdigit() else c for c in " ".join(text.split()).lower())
+
+
+def _in_band(ln: "_Line", height: float) -> bool:
+    return ln.bottom <= height * HEADER_FOOTER_BAND * 1.5 or ln.top >= height * (1 - HEADER_FOOTER_BAND)
+
+
+def _repeating_header_footer_lines(raw_pages) -> set[str]:
+    """Signatures of lines that sit in the top/bottom band on many pages (running headers, page numbers)."""
+    if len(raw_pages) < 4:
+        return set()
+    counts: Counter = Counter()
+    for _, height, lines, _ in raw_pages:
+        counts.update({_signature(ln.text) for ln in lines if _in_band(ln, height)})
+    need = max(3, int(len(raw_pages) * 0.3))
+    return {sig for sig, n in counts.items() if n >= need}
+
+
+def _is_running_line(ln: "_Line", height: float, repeated: set[str]) -> bool:
+    return bool(repeated) and _in_band(ln, height) and _signature(ln.text) in repeated
 
 
 def _join(lines: list[str]) -> str:
@@ -90,9 +148,7 @@ def parse_pdf(raw: bytes, source: str) -> list[ParsedSection]:
     with pdf:
         if len(pdf.pages) > config.MAX_PDF_PAGES:
             raise MalformedFile(f"PDF has {len(pdf.pages)} pages; limit is {config.MAX_PDF_PAGES}")
-        pages: list[tuple[int, list[tuple[float, str, object]]]] = []
-        sizes: Counter = Counter()
-        bold_chars = total_chars = 0
+        raw_pages: list[tuple[int, float, list[_Line], list]] = []
         try:
             for number, page in enumerate(pdf.pages, start=1):
                 tables = page.find_tables()
@@ -104,20 +160,26 @@ def parse_pdf(raw: bytes, source: str) -> list[ParsedSection]:
                         or not _in_any(bb, o["x0"], o["x1"], o["top"], o["bottom"])
                     )
                 words = view.extract_words(extra_attrs=["size", "fontname"], x_tolerance_ratio=WORD_GAP_RATIO)
-                lines = _group_lines(words)
-                for ln in lines:
-                    sizes[ln.size] += len(ln.text)
-                    total_chars += len(ln.text)
-                    if ln.bold:
-                        bold_chars += len(ln.text)
-                items = [(ln.top, "line", ln) for ln in lines]
-                items += [(t.bbox[1], "table", t.extract()) for t in tables]
-                items.sort(key=lambda i: i[0])
-                pages.append((number, items))
+                raw_pages.append((number, float(page.height), _group_lines(words), [(t.bbox[1], t.extract()) for t in tables]))
         except MalformedFile:
             raise
         except Exception as exc:
             raise MalformedFile(f"Could not extract text from PDF: {exc or type(exc).__name__}") from exc
+
+    repeated = _repeating_header_footer_lines(raw_pages)
+    pages: list[tuple[int, list[tuple[float, str, object]]]] = []
+    sizes: Counter = Counter()
+    bold_chars = total_chars = 0
+    for number, height, lines, tables in raw_pages:
+        lines = [ln for ln in lines if not _is_running_line(ln, height, repeated)]
+        for ln in lines:
+            sizes[ln.size] += len(ln.text)
+            total_chars += len(ln.text)
+            if ln.bold:
+                bold_chars += len(ln.text)
+        items = [(ln.top, "line", ln) for ln in lines] + [(top, "table", rows) for top, rows in tables]
+        items.sort(key=lambda i: i[0])
+        pages.append((number, items))
 
     if not sizes:
         body = 0.0
@@ -126,6 +188,8 @@ def parse_pdf(raw: bytes, source: str) -> list[ParsedSection]:
     mostly_bold = total_chars > 0 and bold_chars / total_chars > 0.5
 
     def is_heading(ln: _Line) -> bool:
+        if _is_caption(ln.text):
+            return False
         if body and ln.size >= body * HEADING_SIZE_RATIO:
             return True
         return ln.bold and not mostly_bold and len(ln.text) <= 80 and not ln.text.endswith(".")

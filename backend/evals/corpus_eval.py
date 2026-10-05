@@ -25,34 +25,64 @@ from evals.retrieval_eval import CUTOFFS, MODES, summarize
 DATA = Path(__file__).parent / "data"
 CORPUS = DATA / "corpus"
 RESULTS = Path(__file__).parent / "results"
+QUESTION_FILES = [DATA / "corpus_questions.json", DATA / "corpus_questions_2.json"]
 
 
 def norm(text: str) -> str:
     return " ".join(text.split())
 
 
-def first_hit_rank(hits, source: str, evidence: str) -> int | None:
-    ev = norm(evidence)
+def targets_of(q: dict) -> list[dict]:
+    """Normalize both label schemas: {"source","evidence"} (batch 1) and {"targets":[{"source","quote"}]}."""
+    if "targets" in q:
+        return q["targets"]
+    return [{"source": q["source"], "quote": q["evidence"]}]
+
+
+def covers(h, target: dict, prefix: str = "") -> bool:
+    return h.source == prefix + target["source"] and norm(target["quote"]) in norm(h.text)
+
+
+def first_hit_rank(hits, targets, prefix: str = "", match: str = "any") -> int | None:
+    """Rank at which the question is answered: the first chunk containing any target quote
+    (match="any"), or the smallest prefix of the results that covers every target (match="all")."""
+    if isinstance(targets, str):  # legacy call style: (hits, source, evidence)
+        raise TypeError("pass a list of targets")
+    if match == "all":
+        missing = list(range(len(targets)))
+        for i, h in enumerate(hits, 1):
+            missing = [j for j in missing if not covers(h, targets[j], prefix)]
+            if not missing:
+                return i
+        return None
     for i, h in enumerate(hits, 1):
-        if h.source == source and ev in norm(h.text):
+        if any(covers(h, t, prefix) for t in targets):
             return i
     return None
 
 
+def load_questions(files) -> list[dict]:
+    files = [files] if isinstance(files, Path) else files
+    out = []
+    for f in files:
+        if Path(f).exists():
+            out += json.loads(Path(f).read_text(encoding="utf-8"))
+    return out
+
+
 def run(embedder: Embedder | None = None, reranker=None, k: int = 5, cfg: ChunkConfig | None = None, save: bool = True,
-        corpus: Path = CORPUS, questions_file: Path = DATA / "corpus_questions.json") -> dict:
+        corpus: Path = CORPUS, questions_file=None) -> dict:
     files = sorted(p for p in corpus.glob("*") if p.suffix.lower() in {".md", ".pdf", ".docx", ".html", ".txt"})
     if not files:
         raise SystemExit(f"No corpus files in {corpus}. Run: python -m evals.fetch_corpus")
     embedder = embedder or get_embedder()
     cfg = cfg or ChunkConfig()
-    questions = json.loads(questions_file.read_text(encoding="utf-8"))
+    questions = load_questions(questions_file or QUESTION_FILES)
     prefix = f"corpus-{uuid.uuid4().hex[:6]}-"
     migrate()
 
     try:
-        for f in files:
-            ingest_document(get_conn, embedder, prefix + f.name, f.read_bytes(), cfg)
+        doc_ids = [ingest_document(get_conn, embedder, prefix + f.name, f.read_bytes(), cfg).document_id for f in files]
 
         with get_conn() as conn:
             # Drop labels no single chunk contains.
@@ -62,7 +92,10 @@ def run(embedder: Embedder | None = None, reranker=None, k: int = 5, cfg: ChunkC
                 chunk_text.setdefault(src, "")
                 chunk_text[src] += "\n" + norm(text)
             for q in questions:
-                ok = any(norm(q["evidence"]) in norm(t) for t in chunk_text.get(prefix + q["source"], "").split("\n"))
+                ok = all(
+                    any(norm(t["quote"]) in c for c in chunk_text.get(prefix + t["source"], "").split("\n"))
+                    for t in targets_of(q)
+                )
                 (usable if ok else unlabelable).append(q)
 
             report = {
@@ -75,27 +108,32 @@ def run(embedder: Embedder | None = None, reranker=None, k: int = 5, cfg: ChunkC
                 "unlabelable": [q["id"] for q in unlabelable],
                 "modes": {},
             }
+            others = conn.execute("SELECT count(*) FROM documents WHERE filename NOT LIKE %s", (prefix + "%",)).fetchone()[0]
+            report["other_documents_in_db"] = others  # excluded from every search below via document_ids
             variants = [(m, m, None) for m in MODES]
             if reranker is not None:
                 variants += [(f"{m}+rerank", m, reranker) for m in ("vector", "hybrid")]
             report["reranker"] = getattr(reranker, "model_name", type(reranker).__name__) if reranker else None
             for name, mode, rr in variants:
-                ranks, by_fmt, misses, t0 = [], {}, [], time.perf_counter()
+                ranks, by_fmt, by_kind, misses, t0 = [], {}, {}, [], time.perf_counter()
                 for q in usable:
-                    hits = [h for h in search(conn, embedder, q["question"], k=k, mode=mode, reranker=rr)
+                    hits = [h for h in search(conn, embedder, q["question"], k=k, mode=mode, reranker=rr, document_ids=doc_ids)
                             if h.source.startswith(prefix)]
-                    rank = first_hit_rank(hits, prefix + q["source"], q["evidence"])
+                    tg = targets_of(q)
+                    rank = first_hit_rank(hits, tg, prefix, q.get("match", "any"))
                     ranks.append(rank)
-                    by_fmt.setdefault(Path(q["source"]).suffix.lstrip("."), []).append(rank)
+                    by_fmt.setdefault(Path(tg[0]["source"]).suffix.lstrip("."), []).append(rank)
+                    by_kind.setdefault(q.get("kind", "direct"), []).append(rank)
                     if rank is None or rank > 1:
                         misses.append({"id": q["id"], "question": q["question"], "rank": rank,
-                                       "expected": f"{q['source']} / {q.get('heading')}",
+                                       "expected": " + ".join(t["source"] for t in tg),
                                        "got": [f"{h.source[len(prefix):]} / {h.heading}" for h in hits[:3]]})
                 ms = (time.perf_counter() - t0) * 1000 / len(usable)
                 report["modes"][name] = {
                     **summarize(ranks),
                     "avg_ms_per_query": round(ms, 1),
                     "by_format": {fmt: {**summarize(r), "n": len(r)} for fmt, r in by_fmt.items()},
+                    "by_kind": {kind: {**summarize(r), "n": len(r)} for kind, r in by_kind.items()},
                     "not_ranked_first": misses,
                 }
     finally:
@@ -113,6 +151,8 @@ def run(embedder: Embedder | None = None, reranker=None, k: int = 5, cfg: ChunkC
 def print_report(r: dict) -> None:
     print(f"\nmodel={r['embedding_model']}  chunking={r['chunking']['strategy']}/{r['chunking']['chunk_size']}  "
           f"questions={r['questions']}  k={r['k']}  docs={len(r['documents'])}")
+    if r.get("other_documents_in_db"):
+        print(f"note: {r['other_documents_in_db']} other document(s) in the database were excluded from the search")
     if r["unlabelable"]:
         print(f"excluded (quote split across chunks): {r['unlabelable']}")
     print(f"{'mode':<14}{'hit@1':>7}{'hit@3':>7}{'hit@5':>7}{'MRR':>8}{'ms/query':>10}")
@@ -122,9 +162,14 @@ def print_report(r: dict) -> None:
     for mode, m in r["modes"].items():
         parts = [f"{fmt}: {v['hit@1']:.2f}/{v['hit@5']:.2f}/{v['n']}" for fmt, v in m["by_format"].items()]
         print(f"  {mode:<13}" + "   ".join(parts))
+    print("\nby question kind (hit@1 / hit@5 / n):")
     for mode, m in r["modes"].items():
-        for miss in m["not_ranked_first"]:
-            print(f"  [{mode}] {miss['id']} rank={miss['rank']} expected {miss['expected']} got {miss['got']}")
+        parts = [f"{kd}: {v['hit@1']:.2f}/{v['hit@5']:.2f}/{v['n']}" for kd, v in m.get("by_kind", {}).items()]
+        print(f"  {mode:<13}" + "   ".join(parts))
+    best = list(r["modes"])[-1]  # the last variant is the full pipeline; all misses are in the saved JSON
+    print(f"\nnot ranked first in {best}:")
+    for miss in r["modes"][best]["not_ranked_first"]:
+        print(f"  {miss['id']} rank={miss['rank']} expected {miss['expected']} got {miss['got']}  <- {miss['question']}")
     if "saved_to" in r:
         print(f"\nsaved: {r['saved_to']}")
 

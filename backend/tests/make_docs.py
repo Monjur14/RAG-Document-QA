@@ -72,3 +72,43 @@ def make_zip_bomb_docx(megabytes: int = 3) -> bytes:
         z.writestr("word/document.xml", "<x/>")
         z.writestr("word/big.bin", b"\0" * megabytes * 1024 * 1024)
     return buf.getvalue()
+
+
+def make_pdf_with_running_header(pages: int = 6) -> bytes:
+    """Every page has the same header line and a 'Page N' footer, plus its own body text."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    w, h = A4
+    for n in range(1, pages + 1):
+        c.setFont("Helvetica", 9)
+        c.drawString(72, h - 36, "ACME Handbook v2 - Confidential")
+        c.drawString(w / 2, 30, f"Page {n}")
+        c.setFont("Helvetica", 11)
+        c.drawString(72, h - 200, f"Unique body sentence number {n} about topic {n}.")
+        c.showPage()
+    c.save()
+    return buf.getvalue()
+
+
+def make_pdf_small_caps_heading() -> bytes:
+    """A heading set in small caps: big first letter + smaller rest, as in 'G OVERN' of the NIST CSF."""
+    from reportlab.lib.pagesizes import A4
+    from reportlab.pdfgen import canvas
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=A4)
+    w, h = A4
+    y = h - 100
+    c.setFont("Helvetica-Bold", 20)
+    c.drawString(72, y, "G")
+    c.setFont("Helvetica-Bold", 15)
+    c.drawString(72 + 16, y, "OVERN")
+    c.setFont("Helvetica", 11)
+    c.drawString(72, y - 40, "Governance outcomes inform what an organization may do.")
+    c.drawString(72, y - 56, "They apply to every other function.")
+    c.showPage()
+    c.save()
+    return buf.getvalue()

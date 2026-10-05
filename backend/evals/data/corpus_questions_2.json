@@ -1,0 +1,577 @@
+[
+ {
+  "id": "p01",
+  "question": "Does the AI RMF tell an organization how much risk it should accept?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "it does not prescribe risk tolerance"
+   }
+  ]
+ },
+ {
+  "id": "p02",
+  "question": "Why shouldn't organizations try to get rid of every AI risk?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Attempting to eliminate negative risk entirely can be counterproductive in practice"
+   }
+  ]
+ },
+ {
+  "id": "p03",
+  "question": "How does the framework define risk?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "the composite measure of an event’s probability of occurring and the magnitude or degree of the consequences"
+   }
+  ]
+ },
+ {
+  "id": "p04",
+  "question": "What does residual risk mean?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "risk remaining after risk treatment"
+   }
+  ]
+ },
+ {
+  "id": "p05",
+  "question": "How is explainability different from interpretability?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Explainability refers to a representation of the mechanisms underlying AI systems’ operation"
+   }
+  ]
+ },
+ {
+  "id": "p06",
+  "question": "Which kinds of bias does NIST single out?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "systemic, computational and statistical, and human-cognitive"
+   }
+  ]
+ },
+ {
+  "id": "p07",
+  "question": "Which trustworthiness trait forms the base that the others rest on?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Valid & Reliable is a necessary condition of trustworthiness"
+   }
+  ]
+ },
+ {
+  "id": "p08",
+  "question": "Which characteristic relates to every other trustworthiness characteristic?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Accountable & Transparent is shown as a vertical box because it relates to all other characteristics"
+   }
+  ]
+ },
+ {
+  "id": "p09",
+  "question": "Is resilience the same thing as security for an AI system?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Security and resilience are related but distinct characteristics"
+   }
+  ]
+ },
+ {
+  "id": "p10",
+  "question": "Can privacy protections reduce a model's accuracy?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "privacyenhancing techniques can result in a loss in accuracy"
+   }
+  ]
+ },
+ {
+  "id": "p11",
+  "question": "Is there a companion resource that suggests concrete actions for the framework?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "the NIST AI RMF Playbook"
+   }
+  ]
+ },
+ {
+  "id": "p12",
+  "question": "What decision should teams be able to make once the MAP function is finished?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "initial go/no-go decision about whether to design, develop, or deploy an AI system"
+   }
+  ]
+ },
+ {
+  "id": "p13",
+  "question": "Why might lab measurements of AI risk be misleading?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "these measurements may differ from risks that emerge in operational, real-world settings"
+   }
+  ]
+ },
+ {
+  "id": "p14",
+  "question": "How does the GOVERN function relate to the other three functions?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "GOVERN is a cross-cutting function that is infused throughout AI risk management"
+   }
+  ]
+ },
+ {
+  "id": "p15",
+  "question": "Can making a model easier to interpret conflict with other goals?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "tradeoffs may emerge between optimizing for interpretability and achieving privacy"
+   }
+  ]
+ },
+ {
+  "id": "p16",
+  "question": "Who is considered the main audience of the framework?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "are the primary AI RMF audience"
+   }
+  ]
+ },
+ {
+  "id": "p17",
+  "question": "How urgently should safety risks that could kill or seriously injure someone be handled?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Safety risks that pose a potential risk of serious injury or death call for the most urgent prioritization"
+   }
+  ]
+ },
+ {
+  "id": "p18",
+  "question": "Will NIST check whether the framework actually improves outcomes?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Evaluations of AI RMF effectiveness"
+   }
+  ]
+ },
+ {
+  "id": "p19",
+  "question": "What makes AI risk hard to measure when it comes to metrics?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "The current lack of consensus on robust and verifiable measurement methods for risk and trustworthiness"
+   }
+  ]
+ },
+ {
+  "id": "p20",
+  "question": "Does an opaque system make risk measurement harder?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Inscrutable AI systems can complicate risk measurement"
+   }
+  ]
+ },
+ {
+  "id": "p21",
+  "question": "What is the role of the GOVERN function in CSF 2.0?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Function provides outcomes to inform what an organization may do to achieve and prioritize the outcomes of the other five Functions"
+   }
+  ]
+ },
+ {
+  "id": "p22",
+  "question": "What is the purpose of the DETECT function?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "enables the timely discovery and analysis of anomalies"
+   }
+  ]
+ },
+ {
+  "id": "p23",
+  "question": "What does a Target Profile describe?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "A Target Profile specifies the desired outcomes"
+   }
+  ]
+ },
+ {
+  "id": "p24",
+  "question": "What is a profile shared by many organizations in the same sector called?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "A Community Profile is a baseline of CSF outcomes"
+   }
+  ]
+ },
+ {
+  "id": "p25",
+  "question": "What is the first step when building an organizational profile?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Scope the Organizational Profile."
+   }
+  ]
+ },
+ {
+  "id": "p26",
+  "question": "How do you find out what to fix when moving from the current to the target state?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Analyze the gaps between the Current and Target Profiles"
+   }
+  ]
+ },
+ {
+  "id": "p27",
+  "question": "Are the Tiers meant to replace an organization's own risk management approach?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "rather than replace it"
+   }
+  ]
+ },
+ {
+  "id": "p28",
+  "question": "What are the short guides that help smaller organizations get started with the framework?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Quick-Start Guides (QSGs) are brief documents on specific CSF-related topics"
+   }
+  ]
+ },
+ {
+  "id": "p29",
+  "question": "What do Informative References map the Core to?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Informative References are mappings that indicate relationships between the Core and various standards"
+   }
+  ]
+ },
+ {
+  "id": "p30",
+  "question": "Should the CSF functions be tackled one after another?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "The Functions should be addressed concurrently."
+   }
+  ]
+ },
+ {
+  "id": "p31",
+  "question": "Does the CSF cover cloud and AI systems too?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "They also apply to all types of technology environments, including cloud, mobile, and artificial intelligence"
+   }
+  ]
+ },
+ {
+  "id": "p32",
+  "question": "How can the CSF fit in with enterprise risk management?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Organizations can employ an ERM approach to balance a portfolio of risk considerations"
+   }
+  ]
+ },
+ {
+  "id": "p33",
+  "question": "How does the CSF help executives and managers talk to each other?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "The CSF fosters bidirectional information flow"
+   }
+  ]
+ },
+ {
+  "id": "p34",
+  "question": "Can a function be used as a plain function when declaring a dependency?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-dependencies-index.md",
+    "quote": "It is just a function that can take all the same parameters that a *path operation function* can take"
+   }
+  ]
+ },
+ {
+  "id": "p35",
+  "question": "If two routes could match the same URL, which one wins?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-path-params.md",
+    "quote": "Because *path operations* are evaluated in order"
+   }
+  ]
+ },
+ {
+  "id": "p36",
+  "question": "Why import BackgroundTasks from fastapi instead of from starlette?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-background-tasks.md",
+    "quote": "avoid accidentally importing the alternative `BackgroundTask`"
+   }
+  ]
+ },
+ {
+  "id": "p37",
+  "question": "Must a background task function be async?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-background-tasks.md",
+    "quote": "It can be an `async def` or normal `def` function"
+   }
+  ]
+ },
+ {
+  "id": "p38",
+  "question": "What does FastAPI do to the data in a request body for a Pydantic model?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-body.md",
+    "quote": "Convert the corresponding types (if needed)."
+   }
+  ]
+ },
+ {
+  "id": "p39",
+  "question": "Do dependencies show up in the generated API documentation?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-dependencies-index.md",
+    "quote": "All the request declarations, validations and requirements of your dependencies"
+   }
+  ]
+ },
+ {
+  "id": "p40",
+  "question": "What kind of values can I return from a path operation function?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-first-steps.md",
+    "quote": "You can return a `dict`, `list`, singular values as `str`, `int`, etc."
+   }
+  ]
+ },
+ {
+  "id": "p41",
+  "question": "Am I locked into one hosting provider with FastAPI?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-first-steps.md",
+    "quote": "You can deploy FastAPI apps to any cloud provider you choose."
+   }
+  ]
+ },
+ {
+  "id": "p42",
+  "question": "Which standard is used to describe the API schema?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-first-steps.md",
+    "quote": "using the **OpenAPI** standard for defining APIs"
+   }
+  ]
+ },
+ {
+  "id": "p43",
+  "question": "How do I read the plain string value of an enum path parameter?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-path-params.md",
+    "quote": "You can get the actual value (a `str` in this case) using `model_name.value`"
+   }
+  ]
+ },
+ {
+  "id": "p44",
+  "question": "What if I need a path parameter to contain slashes, like a file path?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-path-params.md",
+    "quote": "But you need `file_path` itself to contain a *path*"
+   }
+  ]
+ },
+ {
+  "id": "p45",
+  "question": "What should I use for heavy background work that doesn't need to share the app's memory?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "fastapi-background-tasks.md",
+    "quote": "you might benefit from using other bigger tools like"
+   }
+  ]
+ },
+ {
+  "id": "m01",
+  "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+  "kind": "multi",
+  "match": "all",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "valid and reliable, safe, secure and resilient"
+   },
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "tradeoffs may emerge between optimizing for interpretability and achieving privacy"
+   }
+  ]
+ },
+ {
+  "id": "m02",
+  "question": "How do the AI RMF and the CSF each treat governance?",
+  "kind": "cross-document",
+  "match": "all",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "GOVERN is a cross-cutting function that is infused throughout AI risk management"
+   },
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Function provides outcomes to inform what an organization may do to achieve and prioritize the outcomes of the other five Functions"
+   }
+  ]
+ },
+ {
+  "id": "m03",
+  "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+  "kind": "cross-document",
+  "match": "all",
+  "targets": [
+   {
+    "source": "nist-ai-rmf.pdf",
+    "quote": "Actions do not constitute a checklist"
+   },
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "It does not prescribe outcomes nor how they may be achieved"
+   }
+  ]
+ },
+ {
+  "id": "m04",
+  "question": "What are the current and target profiles, and how do you find the gap between them?",
+  "kind": "multi",
+  "match": "all",
+  "targets": [
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "A Target Profile specifies the desired outcomes"
+   },
+   {
+    "source": "nist-csf-2.pdf",
+    "quote": "Analyze the gaps between the Current and Target Profiles"
+   }
+  ]
+ },
+ {
+  "id": "m05",
+  "question": "How do path parameters and request bodies get told apart when both are declared?",
+  "kind": "multi",
+  "match": "all",
+  "targets": [
+   {
+    "source": "fastapi-body.md",
+    "quote": "If the parameter is also declared in the **path**, it will be used as a path parameter."
+   },
+   {
+    "source": "fastapi-body.md",
+    "quote": "function parameters that are declared to be Pydantic models should be **taken from the request body**"
+   }
+  ]
+ }
+]

@@ -1,0 +1,2304 @@
+{
+  "timestamp": "2026-10-05T05:48:20",
+  "embedding_model": "BAAI/bge-large-en-v1.5",
+  "chunking": {
+    "strategy": "heading",
+    "chunk_size": 800,
+    "overlap": 100
+  },
+  "k": 5,
+  "documents": [
+    "fastapi-background-tasks.md",
+    "fastapi-body.md",
+    "fastapi-dependencies-index.md",
+    "fastapi-first-steps.md",
+    "fastapi-path-params.md",
+    "fastapi-query-params.md",
+    "fastapi-security-first-steps.md",
+    "nist-ai-rmf.pdf",
+    "nist-csf-2.pdf"
+  ],
+  "questions": 82,
+  "unlabelable": [],
+  "modes": {
+    "vector": {
+      "hit@1": 0.6341463414634146,
+      "hit@3": 0.7804878048780488,
+      "hit@5": 0.8658536585365854,
+      "mrr": 0.7140243902439024,
+      "avg_ms_per_query": 20.6,
+      "by_format": {
+        "md": {
+          "hit@1": 0.696969696969697,
+          "hit@3": 0.8181818181818182,
+          "hit@5": 0.9090909090909091,
+          "mrr": 0.7671717171717172,
+          "n": 33
+        },
+        "pdf": {
+          "hit@1": 0.5918367346938775,
+          "hit@3": 0.7551020408163265,
+          "hit@5": 0.8367346938775511,
+          "mrr": 0.6782312925170069,
+          "n": 49
+        }
+      },
+      "by_kind": {
+        "direct": {
+          "hit@1": 0.6875,
+          "hit@3": 0.78125,
+          "hit@5": 0.84375,
+          "mrr": 0.7364583333333333,
+          "n": 32
+        },
+        "paraphrase": {
+          "hit@1": 0.6666666666666666,
+          "hit@3": 0.8444444444444444,
+          "hit@5": 0.9111111111111111,
+          "mrr": 0.7551851851851852,
+          "n": 45
+        },
+        "multi": {
+          "hit@1": 0.0,
+          "hit@3": 0.3333333333333333,
+          "hit@5": 1.0,
+          "mrr": 0.3333333333333333,
+          "n": 3
+        },
+        "cross-document": {
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "mrr": 0.0,
+          "n": 2
+        }
+      },
+      "not_ranked_first": [
+        {
+          "id": "f01",
+          "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+          "rank": 5,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Without Pydantic"
+          ]
+        },
+        {
+          "id": "f08",
+          "question": "What library performs data validation in FastAPI?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Data validation",
+            "fastapi-body.md / Results",
+            "fastapi-path-params.md / Recap"
+          ]
+        },
+        {
+          "id": "f11",
+          "question": "Which tool provides the alternative API documentation?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation",
+            "fastapi-first-steps.md / Alternative API docs",
+            "fastapi-first-steps.md / What is OpenAPI for"
+          ]
+        },
+        {
+          "id": "f20",
+          "question": "What does OAuth2PasswordBearer look for in a request?",
+          "rank": null,
+          "expected": "fastapi-security-first-steps.md",
+          "got": [
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`"
+          ]
+        },
+        {
+          "id": "n02",
+          "question": "Which AI RMF function applies to all stages of AI risk management?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "n03",
+          "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "n04",
+          "question": "Is the AI RMF mandatory?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / 4. Effectiveness of the AI RMF",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "c02",
+          "question": "Does the CSF prescribe how to achieve cybersecurity outcomes?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5. Improving Cybersecurity Risk Communication and Integration",
+            "nist-csf-2.pdf / Preface",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "c04",
+          "question": "What are CSF Organizational Profiles used for?",
+          "rank": 3,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / CSF Organizational Profile"
+          ]
+        },
+        {
+          "id": "c05",
+          "question": "What are CSF Tiers used to characterize?",
+          "rank": 5,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3. Introduction to CSF Profiles and Tiers",
+            "nist-csf-2.pdf / Appendix B. CSF Tiers",
+            "nist-csf-2.pdf / CSF Tier"
+          ]
+        },
+        {
+          "id": "p01",
+          "question": "Does the AI RMF tell an organization how much risk it should accept?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / NIST AI 100-1 Artificial Intelligence Risk Management Framework (AI RMF 1.0)",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p02",
+          "question": "Why shouldn't organizations try to get rid of every AI risk?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p12",
+          "question": "What decision should teams be able to make once the MAP function is finished?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix C: AI Risk Management and Human-AI Interaction",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "p14",
+          "question": "How does the GOVERN function relate to the other three functions?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix C: AI Risk Management and Human-AI Interaction",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "p15",
+          "question": "Can making a model easier to interpret conflict with other goals?",
+          "rank": 5,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "p16",
+          "question": "Who is considered the main audience of the framework?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 2. Audience",
+            "nist-csf-2.pdf / Audience",
+            "nist-ai-rmf.pdf / 2. Audience"
+          ]
+        },
+        {
+          "id": "p21",
+          "question": "What is the role of the GOVERN function in CSF 2.0?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / CSF Function",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "p24",
+          "question": "What is a profile shared by many organizations in the same sector called?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p25",
+          "question": "What is the first step when building an organizational profile?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p32",
+          "question": "How can the CSF fit in with enterprise risk management?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "p34",
+          "question": "Can a function be used as a plain function when declaring a dependency?",
+          "rank": 5,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / To `async` or not to `async`",
+            "fastapi-dependencies-index.md / Simple usage"
+          ]
+        },
+        {
+          "id": "p38",
+          "question": "What does FastAPI do to the data in a request body for a Pydantic model?",
+          "rank": 3,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Results"
+          ]
+        },
+        {
+          "id": "p40",
+          "question": "What kind of values can I return from a path operation function?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Return *enumeration members*",
+            "fastapi-first-steps.md / Step 4: define the **path operation function**",
+            "fastapi-path-params.md / Working with Python *enumerations*"
+          ]
+        },
+        {
+          "id": "p42",
+          "question": "Which standard is used to describe the API schema?",
+          "rank": 3,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / OpenAPI and JSON Schema",
+            "fastapi-first-steps.md / API \"schema\"",
+            "fastapi-first-steps.md / OpenAPI"
+          ]
+        },
+        {
+          "id": "p43",
+          "question": "How do I read the plain string value of an enum path parameter?",
+          "rank": 4,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Working with Python *enumerations*",
+            "fastapi-path-params.md / Predefined values",
+            "fastapi-path-params.md / Declare a *path parameter*"
+          ]
+        },
+        {
+          "id": "m01",
+          "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+          "rank": 4,
+          "expected": "nist-ai-rmf.pdf + nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "m02",
+          "question": "How do the AI RMF and the CSF each treat governance?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m03",
+          "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "m04",
+          "question": "What are the current and target profiles, and how do you find the gap between them?",
+          "rank": 4,
+          "expected": "nist-csf-2.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "m05",
+          "question": "How do path parameters and request bodies get told apart when both are declared?",
+          "rank": 2,
+          "expected": "fastapi-body.md + fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-query-params.md / Query Parameters"
+          ]
+        }
+      ]
+    },
+    "keyword": {
+      "hit@1": 0.24390243902439024,
+      "hit@3": 0.47560975609756095,
+      "hit@5": 0.5365853658536586,
+      "mrr": 0.36646341463414633,
+      "avg_ms_per_query": 1.2,
+      "by_format": {
+        "md": {
+          "hit@1": 0.24242424242424243,
+          "hit@3": 0.5151515151515151,
+          "hit@5": 0.5757575757575758,
+          "mrr": 0.3757575757575758,
+          "n": 33
+        },
+        "pdf": {
+          "hit@1": 0.24489795918367346,
+          "hit@3": 0.4489795918367347,
+          "hit@5": 0.5102040816326531,
+          "mrr": 0.36020408163265305,
+          "n": 49
+        }
+      },
+      "by_kind": {
+        "direct": {
+          "hit@1": 0.28125,
+          "hit@3": 0.46875,
+          "hit@5": 0.53125,
+          "mrr": 0.3875,
+          "n": 32
+        },
+        "paraphrase": {
+          "hit@1": 0.24444444444444444,
+          "hit@3": 0.5111111111111111,
+          "hit@5": 0.5555555555555556,
+          "mrr": 0.37925925925925924,
+          "n": 45
+        },
+        "multi": {
+          "hit@1": 0.0,
+          "hit@3": 0.3333333333333333,
+          "hit@5": 0.6666666666666666,
+          "mrr": 0.19444444444444442,
+          "n": 3
+        },
+        "cross-document": {
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "mrr": 0.0,
+          "n": 2
+        }
+      },
+      "not_ranked_first": [
+        {
+          "id": "f01",
+          "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+          "rank": null,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\""
+          ]
+        },
+        {
+          "id": "f03",
+          "question": "How does FastAPI decide whether a function parameter is a path, query or body parameter?",
+          "rank": 2,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\""
+          ]
+        },
+        {
+          "id": "f04",
+          "question": "How do I make a query parameter optional?",
+          "rank": null,
+          "expected": "fastapi-query-params.md",
+          "got": [
+            "fastapi-query-params.md / Required query parameters",
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\"",
+            "fastapi-query-params.md / Query Parameters"
+          ]
+        },
+        {
+          "id": "f05",
+          "question": "Do path and query parameters have to be declared in a specific order?",
+          "rank": null,
+          "expected": "fastapi-query-params.md",
+          "got": [
+            "fastapi-query-params.md / Required query parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-query-params.md / Query Parameters"
+          ]
+        },
+        {
+          "id": "f06",
+          "question": "Why must /users/me be declared before /users/{user_id}?",
+          "rank": 2,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-dependencies-index.md / Simple and Powerful",
+            "fastapi-path-params.md / Order matters",
+            "fastapi-dependencies-index.md / Simple and Powerful"
+          ]
+        },
+        {
+          "id": "f07",
+          "question": "How do I restrict a path parameter to a predefined set of values?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-query-params.md / Required query parameters"
+          ]
+        },
+        {
+          "id": "f08",
+          "question": "What library performs data validation in FastAPI?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-first-steps.md / `fastapi dev` with path or with `--entrypoint` CLI option",
+            "fastapi-body.md / Results",
+            "fastapi-path-params.md / Recap"
+          ]
+        },
+        {
+          "id": "f09",
+          "question": "Does OpenAPI support path parameters that contain a path?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Path convertor",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\""
+          ]
+        },
+        {
+          "id": "f10",
+          "question": "What URL serves the Swagger UI interactive docs when running locally?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-first-steps.md / Interactive API docs",
+            "fastapi-body.md / Request Body"
+          ]
+        },
+        {
+          "id": "f11",
+          "question": "Which tool provides the alternative API documentation?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "fastapi-body.md / Request Body"
+          ]
+        },
+        {
+          "id": "f16",
+          "question": "When should I use Celery instead of BackgroundTasks?",
+          "rank": null,
+          "expected": "fastapi-background-tasks.md",
+          "got": [
+            "fastapi-background-tasks.md / Technical Details",
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\""
+          ]
+        },
+        {
+          "id": "f17",
+          "question": "What is dependency injection in FastAPI?",
+          "rank": 5,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Simple and Powerful",
+            "fastapi-dependencies-index.md / Simple usage",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\""
+          ]
+        },
+        {
+          "id": "f18",
+          "question": "Can a dependency be an async function?",
+          "rank": 2,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / To `async` or not to `async`",
+            "fastapi-dependencies-index.md / Simple and Powerful"
+          ]
+        },
+        {
+          "id": "f20",
+          "question": "What does OAuth2PasswordBearer look for in a request?",
+          "rank": 5,
+          "expected": "fastapi-security-first-steps.md",
+          "got": [
+            "fastapi-body.md / Request Body",
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-dependencies-index.md / Simple usage"
+          ]
+        },
+        {
+          "id": "n02",
+          "question": "Which AI RMF function applies to all stages of AI risk management?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Table of Contents",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "n03",
+          "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "n04",
+          "question": "Is the AI RMF mandatory?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "n05",
+          "question": "What law directed NIST to create the AI RMF?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-ai-rmf.pdf / List of Figures"
+          ]
+        },
+        {
+          "id": "c01",
+          "question": "Who is the NIST Cybersecurity Framework 2.0 intended for?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / Appendix B. CSF Tiers"
+          ]
+        },
+        {
+          "id": "c02",
+          "question": "Does the CSF prescribe how to achieve cybersecurity outcomes?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / Abstract",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "c03",
+          "question": "What are the components of the CSF Core hierarchy?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / Appendix A. CSF Core"
+          ]
+        },
+        {
+          "id": "c04",
+          "question": "What are CSF Organizational Profiles used for?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview"
+          ]
+        },
+        {
+          "id": "c06",
+          "question": "What new features does CSF 2.0 highlight?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / Preface",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 4. Introduction to Online Resources That Supplement the CSF"
+          ]
+        },
+        {
+          "id": "p02",
+          "question": "Why shouldn't organizations try to get rid of every AI risk?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p03",
+          "question": "How does the framework define risk?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p04",
+          "question": "What does residual risk mean?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-csf-2.pdf / Appendix A. CSF Core"
+          ]
+        },
+        {
+          "id": "p06",
+          "question": "Which kinds of bias does NIST single out?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Appendix C: AI Risk Management and Human-AI Interaction"
+          ]
+        },
+        {
+          "id": "p07",
+          "question": "Which trustworthiness trait forms the base that the others rest on?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / List of Figures"
+          ]
+        },
+        {
+          "id": "p09",
+          "question": "Is resilience the same thing as security for an AI system?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "p10",
+          "question": "Can privacy protections reduce a model's accuracy?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "p13",
+          "question": "Why might lab measurements of AI risk be misleading?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Table of Contents"
+          ]
+        },
+        {
+          "id": "p14",
+          "question": "How does the GOVERN function relate to the other three functions?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core"
+          ]
+        },
+        {
+          "id": "p15",
+          "question": "Can making a model easier to interpret conflict with other goals?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "fastapi-body.md / Create your data model",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "p16",
+          "question": "Who is considered the main audience of the framework?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / 2. Audience"
+          ]
+        },
+        {
+          "id": "p17",
+          "question": "How urgently should safety risks that could kill or seriously injure someone be handled?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p19",
+          "question": "What makes AI risk hard to measure when it comes to metrics?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Table of Contents"
+          ]
+        },
+        {
+          "id": "p20",
+          "question": "Does an opaque system make risk measurement harder?",
+          "rank": 5,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "p21",
+          "question": "What is the role of the GOVERN function in CSF 2.0?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / Appendix A. CSF Core",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core"
+          ]
+        },
+        {
+          "id": "p22",
+          "question": "What is the purpose of the DETECT function?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-first-steps.md / Step 4: define the **path operation function**"
+          ]
+        },
+        {
+          "id": "p25",
+          "question": "What is the first step when building an organizational profile?",
+          "rank": 5,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p26",
+          "question": "How do you find out what to fix when moving from the current to the target state?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "fastapi-dependencies-index.md / Simple and Powerful"
+          ]
+        },
+        {
+          "id": "p27",
+          "question": "Are the Tiers meant to replace an organization's own risk management approach?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.2. CSF Tiers",
+            "nist-csf-2.pdf / 3.2. CSF Tiers",
+            "nist-csf-2.pdf / Appendix B. CSF Tiers"
+          ]
+        },
+        {
+          "id": "p28",
+          "question": "What are the short guides that help smaller organizations get started with the framework?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-csf-2.pdf / 4. Introduction to Online Resources That Supplement the CSF",
+            "fastapi-query-params.md / Query parameter type conversion"
+          ]
+        },
+        {
+          "id": "p30",
+          "question": "Should the CSF functions be tackled one after another?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / Appendix A. CSF Core",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "p31",
+          "question": "Does the CSF cover cloud and AI systems too?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "p32",
+          "question": "How can the CSF fit in with enterprise risk management?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / Appendix A. CSF Core"
+          ]
+        },
+        {
+          "id": "p33",
+          "question": "How does the CSF help executives and managers talk to each other?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / Preface",
+            "nist-csf-2.pdf / 5.1. Improving Risk Management Communication",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "p34",
+          "question": "Can a function be used as a plain function when declaring a dependency?",
+          "rank": null,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / Simple usage",
+            "fastapi-dependencies-index.md / Simple and Powerful"
+          ]
+        },
+        {
+          "id": "p35",
+          "question": "If two routes could match the same URL, which one wins?",
+          "rank": 3,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-first-steps.md / Operation",
+            "fastapi-path-params.md / Order matters"
+          ]
+        },
+        {
+          "id": "p37",
+          "question": "Must a background task function be async?",
+          "rank": 2,
+          "expected": "fastapi-background-tasks.md",
+          "got": [
+            "fastapi-background-tasks.md / Add the background task",
+            "fastapi-background-tasks.md / Create a task function",
+            "fastapi-background-tasks.md / Dependency Injection"
+          ]
+        },
+        {
+          "id": "p38",
+          "question": "What does FastAPI do to the data in a request body for a Pydantic model?",
+          "rank": 3,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request Body",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Results"
+          ]
+        },
+        {
+          "id": "p39",
+          "question": "Do dependencies show up in the generated API documentation?",
+          "rank": null,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Simple and Powerful",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-security-first-steps.md / Use it"
+          ]
+        },
+        {
+          "id": "p40",
+          "question": "What kind of values can I return from a path operation function?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\"",
+            "fastapi-dependencies-index.md / Simple usage",
+            "fastapi-path-params.md / Order matters"
+          ]
+        },
+        {
+          "id": "p41",
+          "question": "Am I locked into one hosting provider with FastAPI?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / `fastapi dev` with path or with `--entrypoint` CLI option",
+            "fastapi-first-steps.md / First Steps",
+            "fastapi-first-steps.md / About FastAPI Cloud"
+          ]
+        },
+        {
+          "id": "p42",
+          "question": "Which standard is used to describe the API schema?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / OpenAPI and JSON Schema",
+            "fastapi-body.md / Request Body",
+            "fastapi-dependencies-index.md / Share `Annotated` dependencies"
+          ]
+        },
+        {
+          "id": "p43",
+          "question": "How do I read the plain string value of an enum path parameter?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\""
+          ]
+        },
+        {
+          "id": "p44",
+          "question": "What if I need a path parameter to contain slashes, like a file path?",
+          "rank": 2,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Path convertor",
+            "fastapi-path-params.md / Path parameters containing paths",
+            "fastapi-body.md / Request body + path + query parameters"
+          ]
+        },
+        {
+          "id": "m01",
+          "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "m02",
+          "question": "How do the AI RMF and the CSF each treat governance?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-ai-rmf.pdf / Table of Contents",
+            "nist-ai-rmf.pdf / List of Figures"
+          ]
+        },
+        {
+          "id": "m03",
+          "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-ai-rmf.pdf / List of Figures"
+          ]
+        },
+        {
+          "id": "m04",
+          "question": "What are the current and target profiles, and how do you find the gap between them?",
+          "rank": 4,
+          "expected": "nist-csf-2.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles"
+          ]
+        },
+        {
+          "id": "m05",
+          "question": "How do path parameters and request bodies get told apart when both are declared?",
+          "rank": 3,
+          "expected": "fastapi-body.md + fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request Body",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request body + path parameters"
+          ]
+        }
+      ]
+    },
+    "hybrid": {
+      "hit@1": 0.47560975609756095,
+      "hit@3": 0.7195121951219512,
+      "hit@5": 0.8048780487804879,
+      "mrr": 0.598170731707317,
+      "avg_ms_per_query": 20.2,
+      "by_format": {
+        "md": {
+          "hit@1": 0.48484848484848486,
+          "hit@3": 0.7575757575757576,
+          "hit@5": 0.8484848484848485,
+          "mrr": 0.6308080808080808,
+          "n": 33
+        },
+        "pdf": {
+          "hit@1": 0.46938775510204084,
+          "hit@3": 0.6938775510204082,
+          "hit@5": 0.7755102040816326,
+          "mrr": 0.5761904761904763,
+          "n": 49
+        }
+      },
+      "by_kind": {
+        "direct": {
+          "hit@1": 0.46875,
+          "hit@3": 0.71875,
+          "hit@5": 0.84375,
+          "mrr": 0.6114583333333333,
+          "n": 32
+        },
+        "paraphrase": {
+          "hit@1": 0.5333333333333333,
+          "hit@3": 0.7555555555555555,
+          "hit@5": 0.8222222222222222,
+          "mrr": 0.6366666666666666,
+          "n": 45
+        },
+        "multi": {
+          "hit@1": 0.0,
+          "hit@3": 0.6666666666666666,
+          "hit@5": 0.6666666666666666,
+          "mrr": 0.27777777777777773,
+          "n": 3
+        },
+        "cross-document": {
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "mrr": 0.0,
+          "n": 2
+        }
+      },
+      "not_ranked_first": [
+        {
+          "id": "f01",
+          "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+          "rank": null,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\""
+          ]
+        },
+        {
+          "id": "f04",
+          "question": "How do I make a query parameter optional?",
+          "rank": 2,
+          "expected": "fastapi-query-params.md",
+          "got": [
+            "fastapi-query-params.md / Required query parameters",
+            "fastapi-query-params.md / Optional parameters",
+            "fastapi-body.md / Request body + path + query parameters"
+          ]
+        },
+        {
+          "id": "f05",
+          "question": "Do path and query parameters have to be declared in a specific order?",
+          "rank": 5,
+          "expected": "fastapi-query-params.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-path-params.md / Order matters",
+            "fastapi-query-params.md / Required query parameters"
+          ]
+        },
+        {
+          "id": "f06",
+          "question": "Why must /users/me be declared before /users/{user_id}?",
+          "rank": 2,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-dependencies-index.md / Simple and Powerful",
+            "fastapi-path-params.md / Order matters",
+            "fastapi-dependencies-index.md / Simple and Powerful"
+          ]
+        },
+        {
+          "id": "f07",
+          "question": "How do I restrict a path parameter to a predefined set of values?",
+          "rank": 3,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-path-params.md / Path convertor",
+            "fastapi-path-params.md / Predefined values"
+          ]
+        },
+        {
+          "id": "f08",
+          "question": "What library performs data validation in FastAPI?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-body.md / Results",
+            "fastapi-path-params.md / Recap",
+            "fastapi-path-params.md / Data validation"
+          ]
+        },
+        {
+          "id": "f11",
+          "question": "Which tool provides the alternative API documentation?",
+          "rank": 3,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation",
+            "fastapi-first-steps.md / What is OpenAPI for",
+            "fastapi-first-steps.md / Alternative API docs"
+          ]
+        },
+        {
+          "id": "f16",
+          "question": "When should I use Celery instead of BackgroundTasks?",
+          "rank": 2,
+          "expected": "fastapi-background-tasks.md",
+          "got": [
+            "fastapi-background-tasks.md / Technical Details",
+            "fastapi-background-tasks.md / Caveat",
+            "fastapi-background-tasks.md / Dependency Injection"
+          ]
+        },
+        {
+          "id": "f20",
+          "question": "What does OAuth2PasswordBearer look for in a request?",
+          "rank": 2,
+          "expected": "fastapi-security-first-steps.md",
+          "got": [
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`",
+            "fastapi-security-first-steps.md / What it does",
+            "fastapi-body.md / Request Body"
+          ]
+        },
+        {
+          "id": "n02",
+          "question": "Which AI RMF function applies to all stages of AI risk management?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "n03",
+          "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "n04",
+          "question": "Is the AI RMF mandatory?",
+          "rank": 4,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "n05",
+          "question": "What law directed NIST to create the AI RMF?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "c01",
+          "question": "Who is the NIST Cybersecurity Framework 2.0 intended for?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / Abstract",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "c02",
+          "question": "Does the CSF prescribe how to achieve cybersecurity outcomes?",
+          "rank": 4,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / Preface",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "c03",
+          "question": "What are the components of the CSF Core hierarchy?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core"
+          ]
+        },
+        {
+          "id": "c04",
+          "question": "What are CSF Organizational Profiles used for?",
+          "rank": 5,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p03",
+          "question": "How does the framework define risk?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / Table of Contents"
+          ]
+        },
+        {
+          "id": "p09",
+          "question": "Is resilience the same thing as security for an AI system?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks"
+          ]
+        },
+        {
+          "id": "p10",
+          "question": "Can privacy protections reduce a model's accuracy?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "p13",
+          "question": "Why might lab measurements of AI risk be misleading?",
+          "rank": 2,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p15",
+          "question": "Can making a model easier to interpret conflict with other goals?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks"
+          ]
+        },
+        {
+          "id": "p16",
+          "question": "Who is considered the main audience of the framework?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 2. Audience",
+            "nist-ai-rmf.pdf / 2. Audience",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "p19",
+          "question": "What makes AI risk hard to measure when it comes to metrics?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p20",
+          "question": "Does an opaque system make risk measurement harder?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk"
+          ]
+        },
+        {
+          "id": "p21",
+          "question": "What is the role of the GOVERN function in CSF 2.0?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "p22",
+          "question": "What is the purpose of the DETECT function?",
+          "rank": 3,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "fastapi-background-tasks.md / Create a task function",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core"
+          ]
+        },
+        {
+          "id": "p24",
+          "question": "What is a profile shared by many organizations in the same sector called?",
+          "rank": 3,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p25",
+          "question": "What is the first step when building an organizational profile?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p30",
+          "question": "Should the CSF functions be tackled one after another?",
+          "rank": 5,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core",
+            "nist-csf-2.pdf / Appendix A. CSF Core",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "p31",
+          "question": "Does the CSF cover cloud and AI systems too?",
+          "rank": 3,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / Preface",
+            "nist-ai-rmf.pdf / List of Figures",
+            "nist-csf-2.pdf / 2. Introduction to the CSF Core"
+          ]
+        },
+        {
+          "id": "p34",
+          "question": "Can a function be used as a plain function when declaring a dependency?",
+          "rank": null,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / Simple usage",
+            "fastapi-dependencies-index.md / To `async` or not to `async`"
+          ]
+        },
+        {
+          "id": "p38",
+          "question": "What does FastAPI do to the data in a request body for a Pydantic model?",
+          "rank": 4,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request Body",
+            "fastapi-body.md / Request body + path parameters"
+          ]
+        },
+        {
+          "id": "p39",
+          "question": "Do dependencies show up in the generated API documentation?",
+          "rank": 5,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Simple and Powerful",
+            "fastapi-dependencies-index.md / **FastAPI** plug-ins",
+            "fastapi-dependencies-index.md / Share `Annotated` dependencies"
+          ]
+        },
+        {
+          "id": "p40",
+          "question": "What kind of values can I return from a path operation function?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\"",
+            "fastapi-first-steps.md / Step 4: define the **path operation function**",
+            "fastapi-path-params.md / Order matters"
+          ]
+        },
+        {
+          "id": "p41",
+          "question": "Am I locked into one hosting provider with FastAPI?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / About FastAPI Cloud",
+            "fastapi-first-steps.md / Deploy to other cloud providers",
+            "fastapi-first-steps.md / Deploy your app (optional)"
+          ]
+        },
+        {
+          "id": "p42",
+          "question": "Which standard is used to describe the API schema?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / OpenAPI and JSON Schema",
+            "fastapi-first-steps.md / OpenAPI",
+            "fastapi-body.md / Automatic docs"
+          ]
+        },
+        {
+          "id": "p43",
+          "question": "How do I read the plain string value of an enum path parameter?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-path-params.md / Predefined values",
+            "fastapi-path-params.md / Path convertor"
+          ]
+        },
+        {
+          "id": "m01",
+          "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "m02",
+          "question": "How do the AI RMF and the CSF each treat governance?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m03",
+          "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Appendix D: Attributes of the AI RMF",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m04",
+          "question": "What are the current and target profiles, and how do you find the gap between them?",
+          "rank": 3,
+          "expected": "nist-csf-2.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "m05",
+          "question": "How do path parameters and request bodies get told apart when both are declared?",
+          "rank": 2,
+          "expected": "fastapi-body.md + fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request Body"
+          ]
+        }
+      ]
+    },
+    "vector+rerank": {
+      "hit@1": 0.7195121951219512,
+      "hit@3": 0.8536585365853658,
+      "hit@5": 0.8902439024390244,
+      "mrr": 0.792479674796748,
+      "avg_ms_per_query": 15835.9,
+      "by_format": {
+        "md": {
+          "hit@1": 0.7272727272727273,
+          "hit@3": 0.8787878787878788,
+          "hit@5": 0.9090909090909091,
+          "mrr": 0.8090909090909091,
+          "n": 33
+        },
+        "pdf": {
+          "hit@1": 0.7142857142857143,
+          "hit@3": 0.8367346938775511,
+          "hit@5": 0.8775510204081632,
+          "mrr": 0.7812925170068027,
+          "n": 49
+        }
+      },
+      "by_kind": {
+        "direct": {
+          "hit@1": 0.8125,
+          "hit@3": 0.90625,
+          "hit@5": 0.90625,
+          "mrr": 0.859375,
+          "n": 32
+        },
+        "paraphrase": {
+          "hit@1": 0.7333333333333333,
+          "hit@3": 0.8888888888888888,
+          "hit@5": 0.9555555555555556,
+          "mrr": 0.8218518518518518,
+          "n": 45
+        },
+        "multi": {
+          "hit@1": 0.0,
+          "hit@3": 0.3333333333333333,
+          "hit@5": 0.3333333333333333,
+          "mrr": 0.16666666666666666,
+          "n": 3
+        },
+        "cross-document": {
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "mrr": 0.0,
+          "n": 2
+        }
+      },
+      "not_ranked_first": [
+        {
+          "id": "f01",
+          "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+          "rank": 2,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Results",
+            "fastapi-body.md / Request body + path + query parameters"
+          ]
+        },
+        {
+          "id": "f08",
+          "question": "What library performs data validation in FastAPI?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Data validation",
+            "fastapi-path-params.md / Recap",
+            "fastapi-body.md / Results"
+          ]
+        },
+        {
+          "id": "f11",
+          "question": "Which tool provides the alternative API documentation?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation",
+            "fastapi-first-steps.md / Alternative API docs",
+            "fastapi-first-steps.md / What is OpenAPI for"
+          ]
+        },
+        {
+          "id": "n02",
+          "question": "Which AI RMF function applies to all stages of AI risk management?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "n03",
+          "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "c04",
+          "question": "What are CSF Organizational Profiles used for?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview"
+          ]
+        },
+        {
+          "id": "p03",
+          "question": "How does the framework define risk?",
+          "rank": 5,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks"
+          ]
+        },
+        {
+          "id": "p16",
+          "question": "Who is considered the main audience of the framework?",
+          "rank": 3,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-csf-2.pdf / Audience",
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / 2. Audience"
+          ]
+        },
+        {
+          "id": "p24",
+          "question": "What is a profile shared by many organizations in the same sector called?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / CSF Community Profile",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p25",
+          "question": "What is the first step when building an organizational profile?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p26",
+          "question": "How do you find out what to fix when moving from the current to the target state?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.1. Improving Risk Management Communication",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 5.1. Improving Risk Management Communication"
+          ]
+        },
+        {
+          "id": "p28",
+          "question": "What are the short guides that help smaller organizations get started with the framework?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 4. Introduction to Online Resources That Supplement the CSF",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "p32",
+          "question": "How can the CSF fit in with enterprise risk management?",
+          "rank": 4,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "p34",
+          "question": "Can a function be used as a plain function when declaring a dependency?",
+          "rank": 5,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / To `async` or not to `async`"
+          ]
+        },
+        {
+          "id": "p35",
+          "question": "If two routes could match the same URL, which one wins?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-first-steps.md / Path",
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`"
+          ]
+        },
+        {
+          "id": "p40",
+          "question": "What kind of values can I return from a path operation function?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Return *enumeration members*",
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\"",
+            "fastapi-path-params.md / Predefined values"
+          ]
+        },
+        {
+          "id": "p42",
+          "question": "Which standard is used to describe the API schema?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / OpenAPI and JSON Schema",
+            "fastapi-first-steps.md / OpenAPI",
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation"
+          ]
+        },
+        {
+          "id": "p44",
+          "question": "What if I need a path parameter to contain slashes, like a file path?",
+          "rank": 2,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Path convertor",
+            "fastapi-path-params.md / Path parameters containing paths",
+            "fastapi-path-params.md / OpenAPI support"
+          ]
+        },
+        {
+          "id": "m01",
+          "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "m02",
+          "question": "How do the AI RMF and the CSF each treat governance?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m03",
+          "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m04",
+          "question": "What are the current and target profiles, and how do you find the gap between them?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles"
+          ]
+        },
+        {
+          "id": "m05",
+          "question": "How do path parameters and request bodies get told apart when both are declared?",
+          "rank": 2,
+          "expected": "fastapi-body.md + fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request Body"
+          ]
+        }
+      ]
+    },
+    "hybrid+rerank": {
+      "hit@1": 0.7073170731707317,
+      "hit@3": 0.8292682926829268,
+      "hit@5": 0.8902439024390244,
+      "mrr": 0.7829268292682927,
+      "avg_ms_per_query": 168.6,
+      "by_format": {
+        "md": {
+          "hit@1": 0.696969696969697,
+          "hit@3": 0.8484848484848485,
+          "hit@5": 0.9090909090909091,
+          "mrr": 0.7863636363636364,
+          "n": 33
+        },
+        "pdf": {
+          "hit@1": 0.7142857142857143,
+          "hit@3": 0.8163265306122449,
+          "hit@5": 0.8775510204081632,
+          "mrr": 0.7806122448979592,
+          "n": 49
+        }
+      },
+      "by_kind": {
+        "direct": {
+          "hit@1": 0.84375,
+          "hit@3": 0.9375,
+          "hit@5": 0.96875,
+          "mrr": 0.8984375,
+          "n": 32
+        },
+        "paraphrase": {
+          "hit@1": 0.6888888888888889,
+          "hit@3": 0.8222222222222222,
+          "hit@5": 0.9111111111111111,
+          "mrr": 0.7766666666666667,
+          "n": 45
+        },
+        "multi": {
+          "hit@1": 0.0,
+          "hit@3": 0.3333333333333333,
+          "hit@5": 0.3333333333333333,
+          "mrr": 0.16666666666666666,
+          "n": 3
+        },
+        "cross-document": {
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "mrr": 0.0,
+          "n": 2
+        }
+      },
+      "not_ranked_first": [
+        {
+          "id": "f01",
+          "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+          "rank": 2,
+          "expected": "fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Results",
+            "fastapi-body.md / Request body + path + query parameters"
+          ]
+        },
+        {
+          "id": "f08",
+          "question": "What library performs data validation in FastAPI?",
+          "rank": 4,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Data validation",
+            "fastapi-path-params.md / Recap",
+            "fastapi-body.md / Results"
+          ]
+        },
+        {
+          "id": "f11",
+          "question": "Which tool provides the alternative API documentation?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation",
+            "fastapi-first-steps.md / Alternative API docs",
+            "fastapi-first-steps.md / What is OpenAPI for"
+          ]
+        },
+        {
+          "id": "n03",
+          "question": "What characteristics does the AI RMF list for trustworthy AI systems?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "c04",
+          "question": "What are CSF Organizational Profiles used for?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview"
+          ]
+        },
+        {
+          "id": "p03",
+          "question": "How does the framework define risk?",
+          "rank": 4,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Part 1: Foundational Information 1. Framing Risk",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks"
+          ]
+        },
+        {
+          "id": "p09",
+          "question": "Is resilience the same thing as security for an AI system?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / Appendix B: How AI Risks Differ from Traditional Software Risks"
+          ]
+        },
+        {
+          "id": "p16",
+          "question": "Who is considered the main audience of the framework?",
+          "rank": 4,
+          "expected": "nist-ai-rmf.pdf",
+          "got": [
+            "nist-csf-2.pdf / Audience",
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "p24",
+          "question": "What is a profile shared by many organizations in the same sector called?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / CSF Community Profile",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles"
+          ]
+        },
+        {
+          "id": "p25",
+          "question": "What is the first step when building an organizational profile?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles"
+          ]
+        },
+        {
+          "id": "p26",
+          "question": "How do you find out what to fix when moving from the current to the target state?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 5.1. Improving Risk Management Communication",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / Preface"
+          ]
+        },
+        {
+          "id": "p28",
+          "question": "What are the short guides that help smaller organizations get started with the framework?",
+          "rank": 2,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 4. Introduction to Online Resources That Supplement the CSF",
+            "nist-csf-2.pdf / Supplemental Content"
+          ]
+        },
+        {
+          "id": "p32",
+          "question": "How can the CSF fit in with enterprise risk management?",
+          "rank": 4,
+          "expected": "nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 1. Cybersecurity Framework (CSF) Overview",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs",
+            "nist-csf-2.pdf / 5.2. Improving Integration with Other Risk Management Programs"
+          ]
+        },
+        {
+          "id": "p34",
+          "question": "Can a function be used as a plain function when declaring a dependency?",
+          "rank": 5,
+          "expected": "fastapi-dependencies-index.md",
+          "got": [
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / Declare the dependency, in the \"dependant\"",
+            "fastapi-dependencies-index.md / To `async` or not to `async`"
+          ]
+        },
+        {
+          "id": "p35",
+          "question": "If two routes could match the same URL, which one wins?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-first-steps.md / Path",
+            "fastapi-query-params.md / Query Parameters",
+            "fastapi-security-first-steps.md / **FastAPI**'s `OAuth2PasswordBearer`"
+          ]
+        },
+        {
+          "id": "p40",
+          "question": "What kind of values can I return from a path operation function?",
+          "rank": null,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-path-params.md / Return *enumeration members*",
+            "fastapi-dependencies-index.md / Create a dependency, or \"dependable\"",
+            "fastapi-path-params.md / Predefined values"
+          ]
+        },
+        {
+          "id": "p42",
+          "question": "Which standard is used to describe the API schema?",
+          "rank": 2,
+          "expected": "fastapi-first-steps.md",
+          "got": [
+            "fastapi-first-steps.md / OpenAPI and JSON Schema",
+            "fastapi-first-steps.md / OpenAPI",
+            "fastapi-path-params.md / Standards-based benefits, alternative documentation"
+          ]
+        },
+        {
+          "id": "p43",
+          "question": "How do I read the plain string value of an enum path parameter?",
+          "rank": null,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Predefined values",
+            "fastapi-path-params.md / Return *enumeration members*",
+            "fastapi-path-params.md / Working with Python *enumerations*"
+          ]
+        },
+        {
+          "id": "p44",
+          "question": "What if I need a path parameter to contain slashes, like a file path?",
+          "rank": 2,
+          "expected": "fastapi-path-params.md",
+          "got": [
+            "fastapi-path-params.md / Path convertor",
+            "fastapi-path-params.md / Path parameters containing paths",
+            "fastapi-path-params.md / OpenAPI support"
+          ]
+        },
+        {
+          "id": "m01",
+          "question": "What are the trustworthiness characteristics of AI systems, and what trade-offs can arise between them?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-ai-rmf.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness",
+            "nist-ai-rmf.pdf / 3. AI Risks and Trustworthiness"
+          ]
+        },
+        {
+          "id": "m02",
+          "question": "How do the AI RMF and the CSF each treat governance?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core"
+          ]
+        },
+        {
+          "id": "m03",
+          "question": "Do the AI RMF and the CSF tell organizations exactly what steps to follow?",
+          "rank": null,
+          "expected": "nist-ai-rmf.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-ai-rmf.pdf / Executive Summary",
+            "nist-ai-rmf.pdf / Part 2: Core and Profiles 5. AI RMF Core",
+            "nist-ai-rmf.pdf / Executive Summary"
+          ]
+        },
+        {
+          "id": "m04",
+          "question": "What are the current and target profiles, and how do you find the gap between them?",
+          "rank": null,
+          "expected": "nist-csf-2.pdf + nist-csf-2.pdf",
+          "got": [
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-csf-2.pdf / 3.1. CSF Profiles",
+            "nist-ai-rmf.pdf / 6. AI RMF Profiles"
+          ]
+        },
+        {
+          "id": "m05",
+          "question": "How do path parameters and request bodies get told apart when both are declared?",
+          "rank": 2,
+          "expected": "fastapi-body.md + fastapi-body.md",
+          "got": [
+            "fastapi-body.md / Request body + path parameters",
+            "fastapi-body.md / Request body + path + query parameters",
+            "fastapi-body.md / Request Body"
+          ]
+        }
+      ]
+    }
+  },
+  "other_documents_in_db": 4,
+  "reranker": "BAAI/bge-reranker-v2-m3"
+}

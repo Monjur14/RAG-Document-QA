@@ -70,3 +70,29 @@ def test_docx_rejects_bad_files(monkeypatch):
     monkeypatch.setattr(config, "MAX_DOCX_UNCOMPRESSED_BYTES", 1024 * 1024)
     with pytest.raises(MalformedFile, match="uncompressed"):
         parse_file("x.docx", make_docs.make_zip_bomb_docx())
+
+
+def test_pdf_running_headers_and_page_numbers_are_dropped():
+    secs = parse_file("hb.pdf", make_docs.make_pdf_with_running_header())
+    text = " ".join(s.text for s in secs)
+    assert "ACME Handbook" not in text and "Page 3" not in text
+    assert all(f"Unique body sentence number {n}" in text for n in range(1, 7))
+    assert {s.page for s in secs} == set(range(1, 7))
+
+
+def test_pdf_short_documents_keep_their_header_lines():
+    # With fewer than 4 pages there is not enough evidence that a repeated line is a running header.
+    secs = parse_file("hb.pdf", make_docs.make_pdf_with_running_header(pages=2))
+    assert "ACME Handbook" in " ".join(s.text for s in secs)
+
+
+def test_pdf_small_caps_heading_stays_on_one_line():
+    secs = parse_file("caps.pdf", make_docs.make_pdf_small_caps_heading())
+    assert secs and all(s.heading == "GOVERN" for s in secs)
+
+
+def test_figure_and_table_captions_are_not_headings():
+    from app.parsers.pdf import _is_caption
+
+    assert all(_is_caption(t) for t in ["Fig. 3. Steps for creating", "Figure 2: Overview", "Table 1 Categories", "TABLE 4. x"])
+    assert not any(_is_caption(t) for t in ["Figure skating", "Tables and chairs", "1. Introduction", "Fig"])
