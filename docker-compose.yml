@@ -1,3 +1,6 @@
+# Whole app:        docker compose up --build        -> http://localhost:8000
+# Database only:    docker compose up -d db          (for local development with uvicorn + Vite)
+# NVIDIA GPU:       docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build
 services:
   db:
     image: pgvector/pgvector:pg16
@@ -15,5 +18,29 @@ services:
       timeout: 5s
       retries: 10
 
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Optional settings and API keys from the repo-root .env (git-ignored). Missing file is fine.
+    env_file:
+      - path: .env
+        required: false
+    # These win over .env, because inside Docker the addresses are different.
+    environment:
+      DATABASE_URL: postgresql://rag:rag@db:5432/rag
+      # Ollama runs on your computer, not in Docker. host.docker.internal is the host from inside a container.
+      OLLAMA_URL: ${OLLAMA_URL_DOCKER:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # needed on Linux; Docker Desktop has it built in
+    volumes:
+      - models:/models                          # embedding + reranker models, downloaded once (about 3.5 GB)
+      - ./backend/evals/results:/app/evals/results:ro   # new eval runs show on the metrics page without a rebuild
+    restart: unless-stopped
+
 volumes:
   pgdata:
+  models:

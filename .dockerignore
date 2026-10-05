@@ -1,0 +1,16 @@
+# Keep the build context small and free of local state and secrets.
+.git
+.env
+**/.venv
+**/venv
+**/__pycache__
+**/.pytest_cache
+**/node_modules
+frontend/dist
+backend/uploads
+uploads
+pgdata
+.kilo
+**/.kilo
+Claude outputs
+docs
