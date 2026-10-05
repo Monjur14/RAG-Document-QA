@@ -113,3 +113,32 @@ Short record of trade-offs and why. Newest at the bottom.
 - Two PDF parser bugs found while reading these results: small-caps headings ("G OVERN") were split so a heading became the fragment "OVERN" (lines are now grouped by baseline and a capital plus following smaller capitals are merged), and figure/table captions ("Fig. 3 ...") replaced the real section heading (captions are no longer headings).
 - Multi-passage and cross-document questions (n=5) are too few to read anything into; hit@1 is 0 by construction for them. They show that the top 5 usually comes from one document, which suggests a diversity step (limit chunks per document) if cross-document questions matter.
 - Measured on a 2-core CPU the m3 reranker takes about 0.5 s per passage pair; on a GPU it should be far faster. Re-measure on the real machine before deciding the pool size.
+
+## Answer-quality eval, and a retry for citation-only replies (2026-10-05)
+
+`python -m evals.answer_eval` runs the full `/ask` path (hybrid + bge-reranker-v2-m3 + llama3.1:8b) over the 82 answerable
+questions and the 20 unanswerable ones in `corpus_unanswerable.json`. An answer counts as a success when it is `answered`
+and a cited passage contains the labelled quote. It also records whether the quote was in the context given to the LLM,
+which separates retrieval failures from generation failures.
+
+Results (102 questions, about 65 s on GPU):
+
+| | answerable (82) | unanswerable (20) |
+|---|---|---|
+| answered / refused | 0.98 answered | 1.00 refused |
+| success (cited passage has the quote) | 0.81 | n/a |
+| system prompt leaked / injection obeyed | n/a | 0 |
+
+- 14 of the 20 refusals come from the model saying "I don't know"; only 6 are caught by the similarity threshold. The
+  model is therefore doing real work in the refusal path (n=20 is small).
+- llama3.1:8b sometimes replies with only a citation number ("[2]", "[1] [4]"), up to 5 of 82 questions in one run. Counting
+  these as answers hid the problem, so a reply with no words is now `uncited`, and the app retries once with an
+  instruction to answer in a full sentence (token cost of both calls is counted). The retry removed all 5 cases.
+- Of the 15 remaining misses, about 7 look like label strictness (the answer is right, but the model cited another passage
+  that also answers), 2 are correct refusals after a retrieval miss (p35, m02), and the rest are retrieval misses where the
+  model still answered (n03, p09, p40, p43, m01, m03, m04). p40 and p43 give a confident answer to the wrong question.
+- Self-judging with llama3.1:8b (`--judge`) said 97% of answers were correct, which is too lenient to trust (it accepted
+  p40/p43). It stays as an optional second opinion only.
+- Runs vary by 1-2 questions even at temperature 0 (f13 changed between runs), so differences that small are noise.
+- Open: cross-document questions are dominated by one document in the top 5 (a diversity step is a candidate), and the
+  prompt-injection test so far only covers injection in the question, not inside an uploaded document (Week 4).

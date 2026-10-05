@@ -110,6 +110,41 @@ def test_uncited_answer_is_flagged(doc):
     assert a.status == "uncited" and a.citations == []
 
 
+def test_bare_citation_with_no_text_is_uncited(doc):  # bare_citation: seen with llama3.1 on the real eval ("[2]")
+    a = ask(FakeProvider("[1]"), "How do I install Orbit with brew?", doc)
+    assert a.status == "uncited"
+    a = ask(FakeProvider("Yes [1]."), "How do I install Orbit with brew?", doc)
+    assert a.status == "answered"  # a short real answer is fine
+
+
+class SequenceProvider:
+    model = "seq"
+
+    def __init__(self, *replies):
+        self.replies, self.prompts = list(replies), []
+
+    def generate(self, prompt, system=None):
+        from app.providers import LLMResponse
+
+        self.prompts.append(prompt)
+        return LLMResponse(text=self.replies.pop(0), model="seq", prompt_tokens=10, completion_tokens=2, latency_ms=1.0)
+
+
+def test_bare_citation_is_retried_once_and_tokens_are_summed(doc):
+    p = SequenceProvider("[1]", "Use brew install orbit [1].")
+    a = ask(p, "How do I install Orbit with brew?", doc)
+    assert a.status == "answered" and a.answer == "Use brew install orbit [1]."
+    assert len(p.prompts) == 2 and "only a citation number" in p.prompts[1]
+    assert a.prompt_tokens == 20 and a.completion_tokens == 4
+
+
+def test_still_bare_after_retry_is_uncited_and_decline_is_not_retried(doc):
+    p = SequenceProvider("[1]", "[1]")
+    assert ask(p, "How do I install Orbit with brew?", doc).status == "uncited" and len(p.prompts) == 2
+    p = SequenceProvider("I don't know.")
+    assert ask(p, "How do I install Orbit with brew?", doc).status == "model_declined" and len(p.prompts) == 1
+
+
 def test_invented_citation_numbers_are_dropped(doc):
     a = ask(FakeProvider("Do it [7]."), "How do I install Orbit with brew?", doc)
     assert a.status == "uncited"

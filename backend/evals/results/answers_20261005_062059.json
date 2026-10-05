@@ -1,0 +1,205 @@
+{
+  "timestamp": "2026-10-05T06:20:59",
+  "answer_model": "llama3.1:8b",
+  "reranker": "BAAI/bge-reranker-v2-m3",
+  "judge": null,
+  "documents": [
+    "fastapi-background-tasks.md",
+    "fastapi-body.md",
+    "fastapi-dependencies-index.md",
+    "fastapi-first-steps.md",
+    "fastapi-path-params.md",
+    "fastapi-query-params.md",
+    "fastapi-security-first-steps.md",
+    "nist-ai-rmf.pdf",
+    "nist-csf-2.pdf"
+  ],
+  "unlabelable": [],
+  "wall_clock_s": 18.1,
+  "answerable": {
+    "n": 5,
+    "answered": 1.0,
+    "refused_before_llm": 0.0,
+    "model_declined": 0.0,
+    "uncited": 0.0,
+    "citation_supports_given_answered": 1.0,
+    "context_had_answer": 1.0,
+    "success": 1.0,
+    "by_kind": {
+      "direct": {
+        "n": 5,
+        "answered": 1.0,
+        "success": 1.0
+      }
+    },
+    "p50_ms": 576.7,
+    "p95_ms": 13413.7,
+    "avg_prompt_tokens": 1046,
+    "avg_completion_tokens": 75
+  },
+  "unanswerable": {
+    "n": 5,
+    "refused": 1.0,
+    "leaked_or_obeyed": 0,
+    "by_kind": {
+      "off-topic": {
+        "n": 5,
+        "refused": 1.0,
+        "leaked_or_obeyed": 0
+      }
+    }
+  },
+  "answerable_rows": [
+    {
+      "id": "f01",
+      "kind": "direct",
+      "question": "What does FastAPI do with a Pydantic model declared as a function parameter?",
+      "status": "answered",
+      "answer": "[1] will recognize that the function parameters that match path parameters should be taken from the path, and that function parameters that are declared to be Pydantic models should be taken from the request body. [2] states that With just that Python type declaration, FastAPI will: ... * Give you the received data in the parameter `item`. * As you declared it in the function to be of type `Item`, you will also have all the editor support (completion, etc) for all of the attributes and their types.",
+      "cited": [
+        "fastapi-body.md / Request body + path parameters",
+        "fastapi-body.md / Results"
+      ],
+      "confidence": 0.7417116319113011,
+      "citation_supports": true,
+      "context_had_answer": true,
+      "judge_correct": null,
+      "latency_ms": 13413.709700000254,
+      "prompt_tokens": 1061,
+      "completion_tokens": 108
+    },
+    {
+      "id": "f02",
+      "kind": "direct",
+      "question": "Which HTTP methods are normally used to send data in a request body?",
+      "status": "answered",
+      "answer": "According to [1], you should use one of: `POST`, `PUT`, `DELETE` or `PATCH` to send data.",
+      "cited": [
+        "fastapi-body.md / Request Body"
+      ],
+      "confidence": 0.782100141048437,
+      "citation_supports": true,
+      "context_had_answer": true,
+      "judge_correct": null,
+      "latency_ms": 576.6842000002725,
+      "prompt_tokens": 1068,
+      "completion_tokens": 29
+    },
+    {
+      "id": "f03",
+      "kind": "direct",
+      "question": "How does FastAPI decide whether a function parameter is a path, query or body parameter?",
+      "status": "answered",
+      "answer": "According to [1], FastAPI will recognize each parameter and take the data from the correct place based on the following rules:\n\n* If the parameter is also declared in the **path**, it will be used as a path parameter.\n* If the parameter is of a **singular type** (like `int`, `float`, `str`, `bool`, etc) it will be interpreted as a **query** parameter.\n* If the parameter is declared to be of the type of a **Pydantic model**, it will be interpreted as a request **body**.\n\nAdditionally, [2] states that if a function parameter matches a path parameter, it will be taken from the path, and if it's a Pydantic model, it will be taken from the request body.\n\n[3] and [4] also mention that FastAPI can detect whether a parameter is a path or query parameter based on its name, but the primary rules are stated in [1] and [2].",
+      "cited": [
+        "fastapi-body.md / Request body + path + query parameters",
+        "fastapi-body.md / Request body + path parameters",
+        "fastapi-query-params.md / Optional parameters",
+        "fastapi-query-params.md / Multiple path and query parameters"
+      ],
+      "confidence": 0.8617410659790039,
+      "citation_supports": true,
+      "context_had_answer": true,
+      "judge_correct": null,
+      "latency_ms": 1734.6256000000722,
+      "prompt_tokens": 866,
+      "completion_tokens": 200
+    },
+    {
+      "id": "f04",
+      "kind": "direct",
+      "question": "How do I make a query parameter optional?",
+      "status": "answered",
+      "answer": "To make a query parameter optional, you can set its default value to `None`. [1]",
+      "cited": [
+        "fastapi-query-params.md / Optional parameters"
+      ],
+      "confidence": 0.8368113235460134,
+      "citation_supports": true,
+      "context_had_answer": true,
+      "judge_correct": null,
+      "latency_ms": 492.78810000032536,
+      "prompt_tokens": 1140,
+      "completion_tokens": 21
+    },
+    {
+      "id": "f05",
+      "kind": "direct",
+      "question": "Do path and query parameters have to be declared in a specific order?",
+      "status": "answered",
+      "answer": "No, they don't have to be declared in a specific order [1].",
+      "cited": [
+        "fastapi-query-params.md / Multiple path and query parameters"
+      ],
+      "confidence": 0.8322765827178955,
+      "citation_supports": true,
+      "context_had_answer": true,
+      "judge_correct": null,
+      "latency_ms": 469.6721999998772,
+      "prompt_tokens": 1093,
+      "completion_tokens": 17
+    }
+  ],
+  "unanswerable_rows": [
+    {
+      "id": "u01",
+      "kind": "off-topic",
+      "question": "What is the boiling point of water at sea level?",
+      "status": "model_declined",
+      "answer": "I don't know.",
+      "confidence": 0.5244603157043457,
+      "refused": true,
+      "leaked_or_obeyed": false,
+      "refused_before_llm": false,
+      "latency_ms": 361.50200000065524
+    },
+    {
+      "id": "u02",
+      "kind": "off-topic",
+      "question": "Who won the 2018 FIFA World Cup?",
+      "status": "insufficient_evidence",
+      "answer": "I don't know.",
+      "confidence": 0.4550135514115905,
+      "refused": true,
+      "leaked_or_obeyed": false,
+      "refused_before_llm": true,
+      "latency_ms": 199.4265000002997
+    },
+    {
+      "id": "u03",
+      "kind": "off-topic",
+      "question": "How do I brew a good cup of green tea?",
+      "status": "insufficient_evidence",
+      "answer": "I don't know.",
+      "confidence": 0.46393397665417413,
+      "refused": true,
+      "leaked_or_obeyed": false,
+      "refused_before_llm": true,
+      "latency_ms": 188.7085999996998
+    },
+    {
+      "id": "u04",
+      "kind": "off-topic",
+      "question": "What is the tallest mountain in the world?",
+      "status": "insufficient_evidence",
+      "answer": "I don't know.",
+      "confidence": 0.4500777780916956,
+      "refused": true,
+      "leaked_or_obeyed": false,
+      "refused_before_llm": true,
+      "latency_ms": 199.33599999967555
+    },
+    {
+      "id": "u05",
+      "kind": "off-topic",
+      "question": "Translate 'good morning' into Spanish.",
+      "status": "model_declined",
+      "answer": "I don't know.",
+      "confidence": 0.548140320071002,
+      "refused": true,
+      "leaked_or_obeyed": false,
+      "refused_before_llm": false,
+      "latency_ms": 453.9913999997225
+    }
+  ]
+}
