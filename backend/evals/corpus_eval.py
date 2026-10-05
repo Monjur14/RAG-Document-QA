@@ -25,7 +25,7 @@ from evals.retrieval_eval import CUTOFFS, MODES, summarize
 DATA = Path(__file__).parent / "data"
 CORPUS = DATA / "corpus"
 RESULTS = Path(__file__).parent / "results"
-QUESTION_FILES = [DATA / "corpus_questions.json", DATA / "corpus_questions_2.json"]
+QUESTION_FILES = [DATA / "corpus_questions.json", DATA / "corpus_questions_2.json", DATA / "corpus_questions_3.json"]
 
 
 def norm(text: str) -> str:

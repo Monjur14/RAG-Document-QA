@@ -213,3 +213,23 @@ With all layers: 17 attacks blocked by the input guard, 23 handled without any a
 - i15 (false "correction" of a fact) is stopped only because its paragraph also contains an instruction-like phrase; a plain false statement in a document is not detectable by these layers.
 - Redaction masks public emails/phones too (NIST documents), and its patterns do not catch every credential format.
 - Not built yet: sandboxed parsing of uploads, API rate limiting, a benign-document false-positive set larger than the 9-document corpus.
+
+## Per-format evaluation with an original Word file and HTML page (measured, 102 answerable + 21 unanswerable questions)
+
+**What was added.** `python -m evals.make_own_corpus` writes two documents written for this project (an invented backup service, "Harbor"): `harbor-handbook.docx` (heading styles, bullet and numbered lists, two tables) and `harbor-faq.html` (nav/footer boilerplate, a table, a list, and a hidden element holding a decoy fact). 20 labeled questions (12 DOCX, 8 HTML) were added to the existing 82; unanswerable question u21 asks about the hidden decoy. `answer_eval` now reports results per format.
+
+**Retrieval (hit@1 / hit@5, k=5, bge-large + bge-reranker-v2-m3, heading/800 chunks).**
+
+| Format | n | vector | hybrid | vector+rerank | hybrid+rerank |
+|---|---|---|---|---|---|
+| md | 33 | 0.70 / 0.91 | 0.45 / 0.85 | 0.73 / 0.91 | 0.70 / 0.91 |
+| pdf | 49 | 0.59 / 0.84 | 0.47 / 0.78 | 0.71 / 0.88 | 0.71 / 0.88 |
+| docx | 12 | 0.75 / 1.00 | 0.83 / 1.00 | 0.83 / 1.00 | 0.83 / 1.00 |
+| html | 8 | 0.75 / 1.00 | 0.88 / 1.00 | 0.88 / 1.00 | 0.88 / 1.00 |
+| all | 102 | 0.66 / 0.89 (MRR 0.744) | 0.54 / 0.84 (MRR 0.657) | 0.75 / 0.91 (MRR 0.818) | 0.74 / 0.91 (MRR 0.811) |
+
+Keyword-only search: hit@5 0.61, MRR 0.424. The cross-encoder adds about +9 points of hit@1 and +0.07 MRR over vector search alone. Plain hybrid (keyword + vector merged with RRF) was *worse* than vector alone on this set (hit@5 0.84 vs 0.89); after reranking the two are equal (0.91). The reranker, not the keyword half, is what helps here.
+
+**Answers (llama3.1:8b, success = answered and a cited passage contains the labelled quote).** Overall success 0.82 (102 questions); by format: docx 0.92 (n=12), html 0.88 (n=8), md 0.79 (n=33), pdf 0.82 (n=49). Table questions (n=5, Word and HTML tables): success 1.00. Unanswerable: 21/21 refused, 0 leaks; the hidden-text decoy question (u21) was not answered, consistent with the unit test showing the decoy never reaches a chunk.
+
+**What this does and does not show.** No DOCX or HTML parser bug was found, so none was fixed: Word table rows keep their cells (`Pro | 5 TB | ...`) and HTML boilerplate and hidden text are dropped. The Word and HTML scores are higher than PDF/MD, but I wrote those two short documents myself, with about a dozen chunks each, so they are easier than 50-page NIST PDFs and say little about the parser's quality on real Word files. n is 8 and 12: one question moves a score by 8-12 points. The new misses were w05 (answer cited a different passage that also mentions port 8443, label strictness) and h02 (the model said "I don't know" although the context held the answer). HTML tables are flattened to one section per cell, so row grouping is lost (the Asia/Singapore question still passed because the cells stay adjacent). Weakest areas remain NIST PDF questions where retrieval misses (n03, p09, m01-m04) and the cross-document questions (0 of 5).

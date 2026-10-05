@@ -1,0 +1,222 @@
+[
+ {
+  "id": "w01",
+  "question": "When does Harbor run its nightly backup?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "copies folders to encrypted storage every night at 01:30 server time"
+   }
+  ]
+ },
+ {
+  "id": "w02",
+  "question": "How large are the blocks a backup is split into before upload?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "split into blocks of 4 MB before upload"
+   }
+  ]
+ },
+ {
+  "id": "w03",
+  "question": "How long does the Pro plan keep old versions of files, and what is its storage?",
+  "kind": "table",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "Pro | 5 TB | 90 days | 25 USD per month"
+   }
+  ]
+ },
+ {
+  "id": "w04",
+  "question": "What does the Team plan cost per month?",
+  "kind": "table",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "Team | 20 TB | 365 days | 90 USD per month"
+   }
+  ]
+ },
+ {
+  "id": "w05",
+  "question": "Which network port must the firewall allow for Harbor?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "outbound traffic on port 8443"
+   }
+  ]
+ },
+ {
+  "id": "w06",
+  "question": "What is the very first thing to do when installing?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "Download the installer from the account page."
+   }
+  ]
+ },
+ {
+  "id": "w07",
+  "question": "Where do restored files end up unless I choose a location?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "placed in a folder named Harbor-Restored on the desktop"
+   }
+  ]
+ },
+ {
+  "id": "w08",
+  "question": "Roughly how long will it take to rebuild a whole computer that holds 300 GB?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "about one hour for every 100 GB of data"
+   }
+  ]
+ },
+ {
+  "id": "w09",
+  "question": "If I lose my encryption key, can the support team get my data back?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "the data cannot be recovered, even by support staff"
+   }
+  ]
+ },
+ {
+  "id": "w10",
+  "question": "Where do I switch on two-factor authentication?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "under Settings, then Security"
+   }
+  ]
+ },
+ {
+  "id": "w11",
+  "question": "What does error E204 mean and how do I fix it?",
+  "kind": "table",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "E204 | Disk full on target | Free at least 10 percent of the disk."
+   }
+  ]
+ },
+ {
+  "id": "w12",
+  "question": "What should I do about a key mismatch error?",
+  "kind": "table",
+  "targets": [
+   {
+    "source": "harbor-handbook.docx",
+    "quote": "E307 | Key mismatch | Re-import the recovery key from the printed sheet."
+   }
+  ]
+ },
+ {
+  "id": "h01",
+  "question": "Does Harbor back up an external drive that is unplugged?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "External drives are backed up only while they are connected during the scheduled run."
+   }
+  ]
+ },
+ {
+  "id": "h02",
+  "question": "How many devices can one Pro account protect?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "up to 25 devices on the Pro plan"
+   }
+  ]
+ },
+ {
+  "id": "h03",
+  "question": "How much of my bandwidth can uploads use during the working day?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "limited to 50 percent of the available bandwidth during working hours"
+   }
+  ]
+ },
+ {
+  "id": "h04",
+  "question": "Which files does Harbor skip by default?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "Temporary files ending in .tmp and the system swap file are skipped by default."
+   }
+  ]
+ },
+ {
+  "id": "h05",
+  "question": "What happens to my backups after I cancel my subscription?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "access to existing backups continues for 14 days"
+   }
+  ]
+ },
+ {
+  "id": "h06",
+  "question": "Which data centre serves customers in Asia?",
+  "kind": "table",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "Asia Singapore under 60 ms"
+   }
+  ]
+ },
+ {
+  "id": "h07",
+  "question": "How long do deleted files stay in the history on the Starter plan?",
+  "kind": "direct",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "Deleted files stay in the history for 30 days on the Starter plan."
+   }
+  ]
+ },
+ {
+  "id": "h08",
+  "question": "Can I move my data to another data centre after my first upload?",
+  "kind": "paraphrase",
+  "targets": [
+   {
+    "source": "harbor-faq.html",
+    "quote": "Customers cannot choose a data centre after the first backup has been uploaded."
+   }
+  ]
+ }
+]

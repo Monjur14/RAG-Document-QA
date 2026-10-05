@@ -48,6 +48,9 @@ def main() -> int:
         manifest.append({**src, "sha256": hashlib.sha256(data).hexdigest(), "bytes": len(data)})
         print(f"ok  {src['file']:40} {len(data):>9} bytes")
     (CORPUS_DIR / "MANIFEST.json").write_text(json.dumps(manifest, indent=2))
+    from evals.make_own_corpus import main as make_own
+
+    make_own()   # the Word and HTML documents written for this project
     return 1 if failed else 0
 
 

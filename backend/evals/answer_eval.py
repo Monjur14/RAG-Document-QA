@@ -113,7 +113,8 @@ def evaluate(conn, embedder, provider: LLMProvider, answerable: list[dict], unan
         supported = a.status == "answered" and citations_support(a.citations, tg, prefix, match)
         correct = judge_answer(judge, q["question"], a.answer, tg) if judge and a.status == "answered" else None
         rows.append({
-            "id": q["id"], "kind": q.get("kind", "direct"), "question": q["question"], "status": a.status,
+            "id": q["id"], "kind": q.get("kind", "direct"), "format": Path(tg[0]["source"]).suffix.lstrip("."),
+            "question": q["question"], "status": a.status,
             "answer": a.answer, "cited": [f"{c.source[len(prefix):]} / {c.heading}" for c in a.citations],
             "confidence": a.confidence, "citation_supports": supported,
             "context_had_answer": context_has(rec.last_prompt, tg, match), "judge_correct": correct,
@@ -144,6 +145,13 @@ def evaluate(conn, embedder, provider: LLMProvider, answerable: list[dict], unan
         by_kind[kind] = {"n": len(sub),
                          "answered": _pct(sum(r["status"] == "answered" for r in sub), len(sub)),
                          "success": _pct(sum(r["citation_supports"] for r in sub), len(sub))}
+    by_format = {}
+    for fmt in sorted({r["format"] for r in rows}):
+        sub = [r for r in rows if r["format"] == fmt]
+        by_format[fmt] = {"n": len(sub),
+                          "answered": _pct(sum(r["status"] == "answered" for r in sub), len(sub)),
+                          "context_had_answer": _pct(sum(r["context_had_answer"] for r in sub), len(sub)),
+                          "success": _pct(sum(r["citation_supports"] for r in sub), len(sub))}
     answerable_summary = {
         "n": n_a,
         "answered": _pct(len(answered), n_a),
@@ -154,6 +162,7 @@ def evaluate(conn, embedder, provider: LLMProvider, answerable: list[dict], unan
         "context_had_answer": _pct(sum(r["context_had_answer"] for r in rows), n_a),
         "success": _pct(sum(r["citation_supports"] for r in rows), n_a),
         "by_kind": by_kind,
+        "by_format": by_format,
         **_latency([r["latency_ms"] for r in rows]),
         "avg_prompt_tokens": round(statistics.fmean([r["prompt_tokens"] for r in rows if r["prompt_tokens"]] or [0])),
         "avg_completion_tokens": round(statistics.fmean([r["completion_tokens"] for r in rows if r["completion_tokens"]] or [0])),
@@ -248,6 +257,8 @@ def print_report(r: dict) -> None:
     print(f"  latency p50/p95 {a['p50_ms']:.0f}/{a['p95_ms']:.0f} ms   avg tokens in/out {a['avg_prompt_tokens']}/{a['avg_completion_tokens']}")
     print("  by kind (answered / success / n): " + "   ".join(
         f"{k}: {v['answered']:.2f}/{v['success']:.2f}/{v['n']}" for k, v in a["by_kind"].items()))
+    print("  by format (context had answer / success / n): " + "   ".join(
+        f"{k}: {v['context_had_answer']:.2f}/{v['success']:.2f}/{v['n']}" for k, v in a["by_format"].items()))
     print(f"\nUNANSWERABLE (n={u['n']})  refused {u['refused']:.2f}   leaked system prompt or obeyed injection: {u['leaked_or_obeyed']}")
     print("  by kind (refused / leaks / n): " + "   ".join(
         f"{k}: {v['refused']:.2f}/{v['leaked_or_obeyed']}/{v['n']}" for k, v in u["by_kind"].items()))
