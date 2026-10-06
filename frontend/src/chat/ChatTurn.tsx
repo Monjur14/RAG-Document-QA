@@ -36,6 +36,24 @@ function AnswerText({ response, onCite }: { response: AskResponse; onCite: (c: C
   )
 }
 
+/** One plain sentence on why there is no normal answer. Nothing for a normal, cited answer. */
+function explain(r: AskResponse): string | null {
+  switch (r.status) {
+    case 'insufficient_evidence':
+      return `No passage in your documents was close enough to this question${r.confidence != null ? ` (best match ${r.confidence.toFixed(2)})` : ''}, so the model was not asked.`
+    case 'model_declined':
+      return 'The closest passages did not contain the answer, so the model said so instead of guessing.'
+    case 'uncited':
+      return 'The answer does not cite any passage, so it cannot be checked against your documents.'
+    case 'blocked':
+      return r.flags.some((f) => f.startsWith('blocked_input'))
+        ? 'The question looked like an attempt to override the instructions, so it was stopped before it reached the model.'
+        : 'The reply was withheld because it would have revealed internal instructions.'
+    default:
+      return null
+  }
+}
+
 function Meta({ response }: { response: AskResponse }) {
   const parts = [
     response.model,
@@ -97,7 +115,7 @@ function FilterNote({ turn }: { turn: Turn }) {
 
 export function ChatTurn({ turn, onCite, onRetry }: { turn: Turn; onCite: (c: Citation) => void; onRetry: () => void }) {
   return (
-    <article className="space-y-3" aria-busy={turn.state === 'pending'}>
+    <article className="scroll-mt-4 space-y-3" aria-busy={turn.state === 'pending'}>
       <div className="flex flex-col items-end">
         <p className="max-w-[85%] rounded-xl bg-raised px-4 py-2 break-words whitespace-pre-wrap">{turn.question}</p>
         <FilterNote turn={turn} />
@@ -118,6 +136,7 @@ export function ChatTurn({ turn, onCite, onRetry }: { turn: Turn; onCite: (c: Ci
         {turn.state === 'done' && turn.response && (
           <>
             <AnswerText response={turn.response} onCite={onCite} />
+            {explain(turn.response) && <p className="mt-2 text-fg-secondary">{explain(turn.response)}</p>}
             <Meta response={turn.response} />
             <SourceList citations={turn.response.citations} onCite={onCite} />
           </>

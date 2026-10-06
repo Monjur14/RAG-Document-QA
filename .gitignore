@@ -29,3 +29,7 @@ Thumbs.db
 
 # downloaded eval corpus (rebuild with: python -m evals.fetch_corpus)
 backend/evals/data/corpus/
+
+# Local only, not for the repo
+Claude outputs/
+docs/

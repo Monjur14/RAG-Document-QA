@@ -66,6 +66,9 @@ it('shows request statistics', async () => {
   const byStatus = screen.getByRole('list', { name: 'Requests by status' })
   expect(within(byStatus).getByText('30 · 75%')).toBeInTheDocument()
   expect(within(byStatus).getByText('Error')).toBeInTheDocument()
+  // the two "I don't know" statuses get their own names here
+  expect(within(byStatus).getByText('Model declined')).toBeInTheDocument()
+  expect(within(byStatus).getByText("the passages didn't contain the answer")).toBeInTheDocument()
 })
 
 it('switches to the last 24 hours', async () => {

@@ -75,7 +75,7 @@ export function Composer({ onAsk, busy }: { onAsk: (question: string, filters: A
   }
 
   return (
-    <form onSubmit={submit} className="sticky bottom-4 rounded-xl border border-line bg-surface shadow-lg shadow-black/5">
+    <form data-composer onSubmit={submit} className="sticky bottom-4 rounded-xl border border-line bg-surface shadow-lg shadow-black/5">
       {showFilters && (
         <div id={filtersId}>
           <Filters value={filters} onChange={setFilters} />

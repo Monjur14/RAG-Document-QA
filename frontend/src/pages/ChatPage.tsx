@@ -6,18 +6,40 @@ import { ChatTurn } from '../chat/ChatTurn'
 import { CitationPanel } from '../chat/CitationPanel'
 import { Composer } from '../chat/Composer'
 
+/**
+ * Scrolls the least needed to show a turn between the sticky header and the sticky question box. When the turn is
+ * taller than that space, its top (the question) wins: the end of a long answer can be scrolled to, a question that
+ * vanished off the top cannot be read. Extra room above the turn comes from its CSS scroll-margin-top.
+ * window.scrollBy rather than scrollIntoView, which can also scroll the page around an embedded preview.
+ */
+function reveal(el: HTMLElement) {
+  const r = el.getBoundingClientRect()
+  const top = (document.querySelector('header')?.getBoundingClientRect().bottom ?? 0) + (parseFloat(getComputedStyle(el).scrollMarginTop) || 0)
+  const bottom = (document.querySelector('form[data-composer]')?.getBoundingClientRect().top ?? window.innerHeight) - 16
+  let delta = r.bottom > bottom ? r.bottom - bottom : 0
+  if (r.top - delta < top) delta = r.top - top
+  if (Math.abs(delta) > 1) window.scrollBy({ top: delta, behavior: 'smooth' })
+}
+
 export function ChatPage() {
   const { turns, ask, retry, clear } = useChat()
   const [openCitation, setOpenCitation] = useState<Citation | null>(null)
   const busy = turns.some((t) => t.state === 'pending')
 
-  // Follow the conversation when a question is added. window.scrollTo rather than scrollIntoView,
-  // which can also scroll the page around an embedded preview.
-  const count = useRef(turns.length)
+  // Follow the conversation when a question is sent and again when its answer arrives, keeping the question on
+  // screen. Not on first render, so coming back to the page keeps its scroll position.
+  const listRef = useRef<HTMLDivElement>(null)
+  const last = turns.at(-1)
+  const lastKey = last ? `${last.id}:${last.state}` : ''
+  const seen = useRef(lastKey)
   useEffect(() => {
-    if (turns.length > count.current) window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })
-    count.current = turns.length
-  }, [turns.length])
+    const changed = lastKey !== '' && lastKey !== seen.current
+    seen.current = lastKey
+    const el = listRef.current?.lastElementChild
+    if (!changed || !(el instanceof HTMLElement)) return
+    const frame = requestAnimationFrame(() => reveal(el))
+    return () => cancelAnimationFrame(frame)
+  }, [lastKey])
 
   return (
     <div className="mx-auto flex min-h-[calc(100dvh-10rem)] max-w-3xl flex-col">
@@ -43,7 +65,7 @@ export function ChatPage() {
               Clear conversation
             </button>
           </div>
-          <div className="flex-1 space-y-8 pb-8" aria-live="polite">
+          <div ref={listRef} className="flex-1 space-y-8 pb-8" aria-live="polite">
             {turns.map((turn) => (
               <ChatTurn key={turn.id} turn={turn} onCite={setOpenCitation} onRetry={() => retry(turn.id)} />
             ))}

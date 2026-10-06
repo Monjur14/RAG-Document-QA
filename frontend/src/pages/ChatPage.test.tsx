@@ -79,6 +79,7 @@ describe('asking', () => {
     await ask('What is the capital of Mars?')
     expect(await screen.findByText("I don't know", { selector: 'span' })).toBeInTheDocument()
     expect(screen.getByText(/confidence 0\.31/)).toBeInTheDocument()
+    expect(screen.getByText(/No passage in your documents was close enough to this question \(best match 0\.31\)/)).toBeInTheDocument()
   })
 
   it('sends filters, expanding file type groups to every extension', async () => {

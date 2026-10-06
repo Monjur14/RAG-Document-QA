@@ -10,12 +10,21 @@ import { BarList, Card, StatTile } from './parts'
 const isAnswerStatus = (s: string): s is AnswerStatus => s in ANSWER_STATUS
 
 function StatusLabel({ status }: { status: string }) {
-  if (isAnswerStatus(status)) return <StatusBadge status={status} />
+  if (isAnswerStatus(status))
+    return (
+      <span className="inline-flex items-center gap-2">
+        <StatusBadge status={status} label={ANSWER_STATUS[status].metricLabel} />
+        <span className="text-xs text-fg-muted">{ANSWER_STATUS[status].reason}</span>
+      </span>
+    )
   if (status === 'error')
     return (
-      <span className="inline-flex items-center gap-1 rounded-md bg-danger-soft px-2 py-0.5 text-xs font-medium text-danger">
-        <WarningCircleIcon size={14} weight="bold" aria-hidden="true" />
-        Error
+      <span className="inline-flex items-center gap-2">
+        <span className="inline-flex items-center gap-1 rounded-md bg-danger-soft px-2 py-0.5 text-xs font-medium text-danger">
+          <WarningCircleIcon size={14} weight="bold" aria-hidden="true" />
+          Error
+        </span>
+        <span className="text-xs text-fg-muted">model or server failure, no answer</span>
       </span>
     )
   return <span className="text-xs">{status}</span>
